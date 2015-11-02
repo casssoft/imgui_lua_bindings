@@ -32,7 +32,7 @@ How to call function in lua
 ```lua
 opened = imgui.ShowTestWindow(opened)
 ```
-This can make some functions weird. For example Begin.
+This can make some functions a bit weird. For example Begin.
 
 Function definition in C++
 ```c++
@@ -41,15 +41,12 @@ Function definition in C++
 
 How to call function in lua (Note: optional arguments still work)
 ```lua
-isOpen, p_opened = imgui.Begin("Name", p_opened)
-```
-OR
-```lua
-p_opened = imgui.Begin("Name", p_opened)
+shoulddraw, p_opened = imgui.Begin("Name", p_opened)
 ```
 
-As you can see Begin normally returns whether it's open or not as well as setting the value
-of p_opened. In these lua bindings Begin returns two values which end up being the same (only if its passed a bool as a second argument)
+
+Begin normally returns whether it's desirable to draw or not as well as setting the value
+of p_opened to whether the window is open or not. Still use the first return value to decide to whether to call the ImGui functions for that window and imgui.End().
 
 
 ##ImVecs:##
