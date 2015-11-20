@@ -18,6 +18,9 @@ extern "C" {
 // if lua errors
 
 
+// define this global before you call RunString or LoadImGuiBindings
+lua_State* lState;
+
 #ifdef ENABLE_IM_LUA_END_STACK
 // Stack for imgui begin and end
 std::deque<int> endStack;
@@ -35,9 +38,12 @@ static void ImEndStack(int type);
 
 #endif
 
-// Example lua run string program Main function
+// Example lua run string function
 // returns NULL on success and error string on error
 const char * RunString(const char* szLua) {
+  if (!lState) {
+    fprintf(stderr, "You didn't assign the global lState, either assign that or refactor LoadImguiBindings and RunString\n");
+  }
 
   int iStatus = luaL_loadstring(lState, szLua);
   if(iStatus) {
@@ -104,6 +110,16 @@ static int impl_##name(lua_State *L) { \
   lua_Number name = otherwise; \
   if (arg <= max_args) { \
     name = lua_tonumber(L, arg++); \
+  }
+
+#define FLOAT_POINTER_ARG(name) \
+  float name##_value = luaL_checknumber(L, arg++); \
+  float* name = &(name##_value);
+
+#define END_FLOAT_POINTER(name) \
+  if (name != NULL) { \
+    lua_pushnumber(L, name##_value); \
+    stackval++; \
   }
 
 #define OPTIONAL_INT_ARG(name, otherwise)\
@@ -229,6 +245,10 @@ static const struct luaL_Reg imguilib [] = {
 #define NUMBER_ARG(name)
 #undef OPTIONAL_NUMBER_ARG
 #define OPTIONAL_NUMBER_ARG(name, otherwise)
+#undef FLOAT_POINTER_ARG
+#define FLOAT_POINTER_ARG(name)
+#undef END_FLOAT_POINTER
+#define END_FLOAT_POINTER(name)
 #undef OPTIONAL_INT_ARG
 #define OPTIONAL_INT_ARG(name, otherwise)
 #undef INT_ARG
@@ -270,12 +290,15 @@ static const struct luaL_Reg imguilib [] = {
 #undef POP_END_STACK
 #define POP_END_STACK(type)
 
-#include "editor/imgui_iterator.cpp"
+#include "imgui_iterator.cpp"
   {"Button", impl_Button},
   {NULL, NULL}
 };
 
 void LoadImguiBindings() {
+  if (!lState) {
+    fprintf(stderr, "You didn't assign the global lState, either assign that or refactor LoadImguiBindings and RunString\n");
+  }
   lua_newtable(lState);
   luaL_setfuncs(lState, imguilib, 0);
   lua_setglobal(lState, "imgui");

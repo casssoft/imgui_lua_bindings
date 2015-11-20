@@ -19,6 +19,21 @@ my %bannedNames;
 #  "Shutdown" => "banned" );
 
 # This is only useful for ENABLE_IM_LUA_END_STACK
+# We hold a list of differnet 'things' that can be pushed to the stack
+# i.e. Group for BeginGroup
+# It usually works like this BeginBlah EndBlah
+
+# We have to redefine stuff when it doesn't work so cleanly
+my %beginN = (
+  "TreeNode" => "Tree",
+  "TreePush" => "Tree"
+  );
+my %changeN = (
+  "Tree" => "TreePop"
+  );
+my %endN = (
+  "TreePop" => "Tree"
+  );
 my %endOverride = (
   "PopupModal" => "Popup",
   "PopupContextItem" => "Popup",
@@ -26,6 +41,8 @@ my %endOverride = (
   "PopupContextVoid" => "Popup" );
 
 
+my $numSupported = 0;
+my $numUnsupported = 0;
 my $line;
 my %funcNames;
 my %endTypeToInt;
@@ -88,15 +105,21 @@ while ($line = <STDIN>) {
         }
         push(@funcArgs, $name);
         push(@after, "END_BOOL_POINTER($name)");
+      # float * x
+      } elsif ($args[$i] =~ m/^ *float *\* *([^ =\[]*)$/) {
+        my $name = $1;
+        push(@before, "FLOAT_POINTER_ARG($name)");
+        push(@funcArgs, $name);
+        push(@after, "END_FLOAT_POINTER($name)");
         #float a or float a = number
       } elsif ($args[$i] =~ m/^ *float *([^ =\[]*)( *= *[^ ]*|)$/) {
         my $name = $1;
         if ($2 =~ m/^ *= *([^ ]*)$/) {
           push(@before, "OPTIONAL_NUMBER_ARG($name, $1)");
         } else {
-          push(@before, "NUMBER_ARG($1)");
+          push(@before, "NUMBER_ARG($name)");
         }
-        push(@funcArgs, $1);
+        push(@funcArgs, $name);
         # const char* a or const char* a = NULL or "blah"
       } elsif ($args[$i] =~ m/^ *const char\* *([^ =\[]*)( *= *(NULL|".*")|) *$/) {
         my $name = $1;
@@ -176,10 +199,15 @@ while ($line = <STDIN>) {
       print ")\n";
 
       #for begin and end stack stuff
-      if ($funcName =~ m/^Begin(.*)$/) {
-        my $curEndType = $1;
-        if (defined($endOverride{$1})) {
-          $curEndType = $endOverride{$1};
+      if ($funcName =~ m/^Begin(.*)$/ || defined($beginN{$funcName})) {
+        my $curEndType;
+        if (defined($beginN{$funcName})) {
+          $curEndType = $beginN{$funcName};
+        } else {
+          $curEndType = $1;
+        }
+        if (defined($endOverride{$curEndType})) {
+          $curEndType = $endOverride{$curEndType};
         }
         if (!defined($endTypeToInt{$curEndType})) {
           $endTypeToInt{$curEndType} = scalar(@endTypes);
@@ -191,10 +219,15 @@ while ($line = <STDIN>) {
         } else {
           print "ADD_END_STACK($curEndTypeInt)\n";
         }
-      } elsif ($funcName =~ m/^End(.*)$/) {
-        my $curEndType = $1;
-        if (defined($endOverride{$1})) {
-          $curEndType = $endOverride{$1};
+      } elsif ($funcName =~ m/^End(.*)$/ || defined($endN{$funcName})) {
+        my $curEndType;
+        if (defined($endN{$funcName})) {
+          $curEndType = $endN{$funcName};
+        } else {
+          $curEndType = $1;
+        }
+        if (defined($endOverride{$curEndType})) {
+          $curEndType = $endOverride{$curEndType};
         }
         if (!defined($endTypeToInt{$curEndType})) {
           $endTypeToInt{$curEndType} = scalar(@endTypes);
@@ -208,6 +241,9 @@ while ($line = <STDIN>) {
         print $after[$i] . "\n";
       }
       print "END_IMGUI_FUNC\n";
+      $numSupported += 1;
+    } else {
+      $numUnsupported += 1;
     }
   } elsif ($line =~ m/^} \/\/ namespace ImGui$/) {
     last;
@@ -216,6 +252,15 @@ while ($line = <STDIN>) {
 #for end stack stuff
 print "END_STACK_START\n";
 for (my $i = 0; $i < @endTypes; $i++) {
-  print "END_STACK_OPTION($i, " . "End" . $endTypes[$i] .")\n";
+  my $endFunc;
+  if (defined($changeN{$endTypes[$i]})) {
+    $endFunc = $changeN{$endTypes[$i]};
+  } else {
+    $endFunc = "End" . $endTypes[$i];
+  }
+  print "END_STACK_OPTION($i, " . $endFunc .")\n";
 }
 print "END_STACK_END\n";
+
+#debug info
+print STDERR "Supported: $numSupported Unsupported: $numUnsupported\n";

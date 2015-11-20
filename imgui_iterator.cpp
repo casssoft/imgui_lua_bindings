@@ -1,7 +1,3 @@
-// This was generated for version 1.47 WIP
-// as you can see it doesn't really support initalizing imgui
-// its probably easier to do in c++ anyways
-
 //    IMGUI_API ImGuiIO&      GetIO();
 // Unsupported return type ImGuiIO&
 //    IMGUI_API ImGuiStyle&   GetStyle();
@@ -55,7 +51,7 @@ BOOL_POINTER_ARG(p_opened)
 IM_VEC_2_ARG(size_on_first_use)
 OPTIONAL_NUMBER_ARG(bg_alpha, -1.0f)
 OPTIONAL_INT_ARG(flags, 0)
-CALL_FUNCTION(Begin, bool, name, p_opened, size_on_first_use, -1.0f, flags)
+CALL_FUNCTION(Begin, bool, name, p_opened, size_on_first_use, bg_alpha, flags)
 IF_RET_ADD_END_STACK(0)
 PUSH_BOOL(ret)
 END_BOOL_POINTER(p_opened)
@@ -268,13 +264,13 @@ END_IMGUI_FUNC
 //    IMGUI_API void          SetScrollHere(float center_y_ratio = 0.5f);                         // adjust scrolling amount to make current cursor position visible. center_y_ratio=0.0: top, 0.5: center, 1.0: bottom.
 IMGUI_FUNCTION(SetScrollHere)
 OPTIONAL_NUMBER_ARG(center_y_ratio, 0.5f)
-CALL_FUNCTION_NO_RET(SetScrollHere, 0.5f)
+CALL_FUNCTION_NO_RET(SetScrollHere, center_y_ratio)
 END_IMGUI_FUNC
 //    IMGUI_API void          SetScrollFromPosY(float pos_y, float center_y_ratio = 0.5f);        // adjust scrolling amount to make given position valid. use GetCursorPos() or GetCursorStartPos()+offset to get valid positions.
 IMGUI_FUNCTION(SetScrollFromPosY)
 NUMBER_ARG(pos_y)
 OPTIONAL_NUMBER_ARG(center_y_ratio, 0.5f)
-CALL_FUNCTION_NO_RET(SetScrollFromPosY, pos_y, 0.5f)
+CALL_FUNCTION_NO_RET(SetScrollFromPosY, pos_y, center_y_ratio)
 END_IMGUI_FUNC
 //    IMGUI_API void          SetKeyboardFocusHere(int offset = 0);                               // focus keyboard on the next widget. Use positive 'offset' to access sub components of a multiple component widget
 IMGUI_FUNCTION(SetKeyboardFocusHere)
@@ -332,7 +328,7 @@ END_IMGUI_FUNC
 //    IMGUI_API void          PushTextWrapPos(float wrap_pos_x = 0.0f);                           // word-wrapping for Text*() commands. < 0.0f: no wrapping; 0.0f: wrap to end of window (or column); > 0.0f: wrap at 'wrap_pos_x' position in window local space
 IMGUI_FUNCTION(PushTextWrapPos)
 OPTIONAL_NUMBER_ARG(wrap_pos_x, 0.0f)
-CALL_FUNCTION_NO_RET(PushTextWrapPos, 0.0f)
+CALL_FUNCTION_NO_RET(PushTextWrapPos, wrap_pos_x)
 END_IMGUI_FUNC
 //    IMGUI_API void          PopTextWrapPos();
 IMGUI_FUNCTION(PopTextWrapPos)
@@ -374,7 +370,7 @@ END_IMGUI_FUNC
 IMGUI_FUNCTION(SameLine)
 OPTIONAL_NUMBER_ARG(local_pos_x, 0.0f)
 OPTIONAL_NUMBER_ARG(spacing_w, -1.0f)
-CALL_FUNCTION_NO_RET(SameLine, 0.0f, -1.0f)
+CALL_FUNCTION_NO_RET(SameLine, local_pos_x, spacing_w)
 END_IMGUI_FUNC
 //    IMGUI_API void          Spacing();                                                          // add spacing
 IMGUI_FUNCTION(Spacing)
@@ -661,7 +657,18 @@ END_IMGUI_FUNC
 // Unsupported arg type  void* data
 // Unsupported arg type  ImVec2 graph_size = ImVec2 0 0
 //    IMGUI_API bool          DragFloat(const char* label, float* v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* display_format = "%.3f", float power = 1.0f);     // If v_min >= v_max we have no bound
-// Unsupported arg type  float* v
+IMGUI_FUNCTION(DragFloat)
+LABEL_ARG(label)
+FLOAT_POINTER_ARG(v)
+OPTIONAL_NUMBER_ARG(v_speed, 1.0f)
+OPTIONAL_NUMBER_ARG(v_min, 0.0f)
+OPTIONAL_NUMBER_ARG(v_max, 0.0f)
+LABEL_ARG(display_format)
+OPTIONAL_NUMBER_ARG(power, 1.0f)
+CALL_FUNCTION(DragFloat, bool, label, v, v_speed, v_min, v_max, display_format, power)
+PUSH_BOOL(ret)
+END_FLOAT_POINTER(v)
+END_IMGUI_FUNC
 //    IMGUI_API bool          DragFloat2(const char* label, float v[2], float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* display_format = "%.3f", float power = 1.0f);
 // Unsupported arg type  float v[2]
 //    IMGUI_API bool          DragFloat3(const char* label, float v[3], float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* display_format = "%.3f", float power = 1.0f);
@@ -669,8 +676,21 @@ END_IMGUI_FUNC
 //    IMGUI_API bool          DragFloat4(const char* label, float v[4], float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* display_format = "%.3f", float power = 1.0f);
 // Unsupported arg type  float v[4]
 //    IMGUI_API bool          DragFloatRange2(const char* label, float* v_current_min, float* v_current_max, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* display_format = "%.3f", const char* display_format_max = NULL, float power = 1.0f);
-// Unsupported arg type  float* v_current_min
-// Unsupported arg type  float* v_current_max
+IMGUI_FUNCTION(DragFloatRange2)
+LABEL_ARG(label)
+FLOAT_POINTER_ARG(v_current_min)
+FLOAT_POINTER_ARG(v_current_max)
+OPTIONAL_NUMBER_ARG(v_speed, 1.0f)
+OPTIONAL_NUMBER_ARG(v_min, 0.0f)
+OPTIONAL_NUMBER_ARG(v_max, 0.0f)
+LABEL_ARG(display_format)
+OPTIONAL_LABEL_ARG(display_format_max)
+OPTIONAL_NUMBER_ARG(power, 1.0f)
+CALL_FUNCTION(DragFloatRange2, bool, label, v_current_min, v_current_max, v_speed, v_min, v_max, display_format, display_format_max, power)
+PUSH_BOOL(ret)
+END_FLOAT_POINTER(v_current_min)
+END_FLOAT_POINTER(v_current_max)
+END_IMGUI_FUNC
 //    IMGUI_API bool          DragInt(const char* label, int* v, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* display_format = "%.0f");                                       // If v_min >= v_max we have no bound
 // Unsupported arg type  int* v
 //    IMGUI_API bool          DragInt2(const char* label, int v[2], float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* display_format = "%.0f");
@@ -694,7 +714,17 @@ END_IMGUI_FUNC
 // Unsupported arg type  ImGuiTextEditCallback callback = NULL
 // Unsupported arg type  void* user_data = NULL
 //    IMGUI_API bool          InputFloat(const char* label, float* v, float step = 0.0f, float step_fast = 0.0f, int decimal_precision = -1, ImGuiInputTextFlags extra_flags = 0);
-// Unsupported arg type  float* v
+IMGUI_FUNCTION(InputFloat)
+LABEL_ARG(label)
+FLOAT_POINTER_ARG(v)
+OPTIONAL_NUMBER_ARG(step, 0.0f)
+OPTIONAL_NUMBER_ARG(step_fast, 0.0f)
+OPTIONAL_INT_ARG(decimal_precision, -1)
+OPTIONAL_INT_ARG(extra_flags, 0)
+CALL_FUNCTION(InputFloat, bool, label, v, step, step_fast, decimal_precision, extra_flags)
+PUSH_BOOL(ret)
+END_FLOAT_POINTER(v)
+END_IMGUI_FUNC
 //    IMGUI_API bool          InputFloat2(const char* label, float v[2], int decimal_precision = -1, ImGuiInputTextFlags extra_flags = 0);
 // Unsupported arg type  float v[2]
 //    IMGUI_API bool          InputFloat3(const char* label, float v[3], int decimal_precision = -1, ImGuiInputTextFlags extra_flags = 0);
@@ -710,7 +740,17 @@ END_IMGUI_FUNC
 //    IMGUI_API bool          InputInt4(const char* label, int v[4], ImGuiInputTextFlags extra_flags = 0);
 // Unsupported arg type  int v[4]
 //    IMGUI_API bool          SliderFloat(const char* label, float* v, float v_min, float v_max, const char* display_format = "%.3f", float power = 1.0f);     // adjust display_format to decorate the value with a prefix or a suffix. Use power!=1.0 for logarithmic sliders
-// Unsupported arg type  float* v
+IMGUI_FUNCTION(SliderFloat)
+LABEL_ARG(label)
+FLOAT_POINTER_ARG(v)
+NUMBER_ARG(v_min)
+NUMBER_ARG(v_max)
+LABEL_ARG(display_format)
+OPTIONAL_NUMBER_ARG(power, 1.0f)
+CALL_FUNCTION(SliderFloat, bool, label, v, v_min, v_max, display_format, power)
+PUSH_BOOL(ret)
+END_FLOAT_POINTER(v)
+END_IMGUI_FUNC
 //    IMGUI_API bool          SliderFloat2(const char* label, float v[2], float v_min, float v_max, const char* display_format = "%.3f", float power = 1.0f);
 // Unsupported arg type  float v[2]
 //    IMGUI_API bool          SliderFloat3(const char* label, float v[3], float v_min, float v_max, const char* display_format = "%.3f", float power = 1.0f);
@@ -718,7 +758,15 @@ END_IMGUI_FUNC
 //    IMGUI_API bool          SliderFloat4(const char* label, float v[4], float v_min, float v_max, const char* display_format = "%.3f", float power = 1.0f);
 // Unsupported arg type  float v[4]
 //    IMGUI_API bool          SliderAngle(const char* label, float* v_rad, float v_degrees_min = -360.0f, float v_degrees_max = +360.0f);
-// Unsupported arg type  float* v_rad
+IMGUI_FUNCTION(SliderAngle)
+LABEL_ARG(label)
+FLOAT_POINTER_ARG(v_rad)
+OPTIONAL_NUMBER_ARG(v_degrees_min, -360.0f)
+OPTIONAL_NUMBER_ARG(v_degrees_max, +360.0f)
+CALL_FUNCTION(SliderAngle, bool, label, v_rad, v_degrees_min, v_degrees_max)
+PUSH_BOOL(ret)
+END_FLOAT_POINTER(v_rad)
+END_IMGUI_FUNC
 //    IMGUI_API bool          SliderInt(const char* label, int* v, int v_min, int v_max, const char* display_format = "%.0f");
 // Unsupported arg type  int* v
 //    IMGUI_API bool          SliderInt2(const char* label, int v[2], int v_min, int v_max, const char* display_format = "%.0f");
@@ -728,13 +776,25 @@ END_IMGUI_FUNC
 //    IMGUI_API bool          SliderInt4(const char* label, int v[4], int v_min, int v_max, const char* display_format = "%.0f");
 // Unsupported arg type  int v[4]
 //    IMGUI_API bool          VSliderFloat(const char* label, const ImVec2& size, float* v, float v_min, float v_max, const char* display_format = "%.3f", float power = 1.0f);
-// Unsupported arg type  float* v
+IMGUI_FUNCTION(VSliderFloat)
+LABEL_ARG(label)
+IM_VEC_2_ARG(size)
+FLOAT_POINTER_ARG(v)
+NUMBER_ARG(v_min)
+NUMBER_ARG(v_max)
+LABEL_ARG(display_format)
+OPTIONAL_NUMBER_ARG(power, 1.0f)
+CALL_FUNCTION(VSliderFloat, bool, label, size, v, v_min, v_max, display_format, power)
+PUSH_BOOL(ret)
+END_FLOAT_POINTER(v)
+END_IMGUI_FUNC
 //    IMGUI_API bool          VSliderInt(const char* label, const ImVec2& size, int* v, int v_min, int v_max, const char* display_format = "%.0f");
 // Unsupported arg type  int* v
 //    IMGUI_API bool          TreeNode(const char* str_label_id);                                     // if returning 'true' the node is open and the user is responsible for calling TreePop()
 IMGUI_FUNCTION(TreeNode)
 LABEL_ARG(str_label_id)
 CALL_FUNCTION(TreeNode, bool, str_label_id)
+IF_RET_ADD_END_STACK(3)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API bool          TreeNode(const char* str_id, const char* fmt, ...) IM_PRINTFARGS(2);    // "
@@ -751,12 +811,14 @@ END_IMGUI_FUNC
 IMGUI_FUNCTION(TreePush)
 OPTIONAL_LABEL_ARG(str_id)
 CALL_FUNCTION_NO_RET(TreePush, str_id)
+ADD_END_STACK(3)
 END_IMGUI_FUNC
 //    IMGUI_API void          TreePush(const void* ptr_id = NULL);                                    // "
 // Unsupported arg type const void* ptr_id = NULL
 //    IMGUI_API void          TreePop();
 IMGUI_FUNCTION(TreePop)
 CALL_FUNCTION_NO_RET(TreePop)
+POP_END_STACK(3)
 END_IMGUI_FUNC
 //    IMGUI_API void          SetNextTreeNodeOpened(bool opened, ImGuiSetCond cond = 0);              // set next tree node to be opened.
 IMGUI_FUNCTION(SetNextTreeNodeOpened)
@@ -830,47 +892,47 @@ END_IMGUI_FUNC
 //    IMGUI_API void          BeginTooltip();                                                     // use to create full-featured tooltip windows that aren't just text
 IMGUI_FUNCTION(BeginTooltip)
 CALL_FUNCTION_NO_RET(BeginTooltip)
-ADD_END_STACK(3)
+ADD_END_STACK(4)
 END_IMGUI_FUNC
 //    IMGUI_API void          EndTooltip();
 IMGUI_FUNCTION(EndTooltip)
 CALL_FUNCTION_NO_RET(EndTooltip)
-POP_END_STACK(3)
+POP_END_STACK(4)
 END_IMGUI_FUNC
 //    IMGUI_API bool          BeginMainMenuBar();                                                 // create and append to a full screen menu-bar. only call EndMainMenuBar() if this returns true!
 IMGUI_FUNCTION(BeginMainMenuBar)
 CALL_FUNCTION(BeginMainMenuBar, bool)
-IF_RET_ADD_END_STACK(4)
+IF_RET_ADD_END_STACK(5)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API void          EndMainMenuBar();
 IMGUI_FUNCTION(EndMainMenuBar)
 CALL_FUNCTION_NO_RET(EndMainMenuBar)
-POP_END_STACK(4)
+POP_END_STACK(5)
 END_IMGUI_FUNC
 //    IMGUI_API bool          BeginMenuBar();                                                     // append to menu-bar of current window (requires ImGuiWindowFlags_MenuBar flag set). only call EndMenuBar() if this returns true!
 IMGUI_FUNCTION(BeginMenuBar)
 CALL_FUNCTION(BeginMenuBar, bool)
-IF_RET_ADD_END_STACK(5)
+IF_RET_ADD_END_STACK(6)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API void          EndMenuBar();
 IMGUI_FUNCTION(EndMenuBar)
 CALL_FUNCTION_NO_RET(EndMenuBar)
-POP_END_STACK(5)
+POP_END_STACK(6)
 END_IMGUI_FUNC
 //    IMGUI_API bool          BeginMenu(const char* label, bool enabled = true);                  // create a sub-menu entry. only call EndMenu() if this returns true!
 IMGUI_FUNCTION(BeginMenu)
 LABEL_ARG(label)
 OPTIONAL_BOOL_ARG(enabled, true)
 CALL_FUNCTION(BeginMenu, bool, label, enabled)
-IF_RET_ADD_END_STACK(6)
+IF_RET_ADD_END_STACK(7)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API void          EndMenu();
 IMGUI_FUNCTION(EndMenu)
 CALL_FUNCTION_NO_RET(EndMenu)
-POP_END_STACK(6)
+POP_END_STACK(7)
 END_IMGUI_FUNC
 //    IMGUI_API bool          MenuItem(const char* label, const char* shortcut = NULL, bool selected = false, bool enabled = true);  // return true when activated. shortcuts are displayed for convenience but not processed by ImGui at the moment
 IMGUI_FUNCTION(MenuItem)
@@ -900,7 +962,7 @@ END_IMGUI_FUNC
 IMGUI_FUNCTION(BeginPopup)
 LABEL_ARG(str_id)
 CALL_FUNCTION(BeginPopup, bool, str_id)
-IF_RET_ADD_END_STACK(7)
+IF_RET_ADD_END_STACK(8)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API bool          BeginPopupModal(const char* name, bool* p_opened = NULL, ImGuiWindowFlags extra_flags = 0);             // modal dialog (can't close them by clicking outside)
@@ -909,7 +971,7 @@ LABEL_ARG(name)
 OPTIONAL_BOOL_POINTER_ARG(p_opened)
 OPTIONAL_INT_ARG(extra_flags, 0)
 CALL_FUNCTION(BeginPopupModal, bool, name, p_opened, extra_flags)
-IF_RET_ADD_END_STACK(7)
+IF_RET_ADD_END_STACK(8)
 PUSH_BOOL(ret)
 END_BOOL_POINTER(p_opened)
 END_IMGUI_FUNC
@@ -918,7 +980,7 @@ IMGUI_FUNCTION(BeginPopupContextItem)
 LABEL_ARG(str_id)
 OPTIONAL_INT_ARG(mouse_button, 1)
 CALL_FUNCTION(BeginPopupContextItem, bool, str_id, mouse_button)
-IF_RET_ADD_END_STACK(7)
+IF_RET_ADD_END_STACK(8)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API bool          BeginPopupContextWindow(bool also_over_items = true, const char* str_id = NULL, int mouse_button = 1);  // helper to open and begin popup when clicked on current window
@@ -927,7 +989,7 @@ OPTIONAL_BOOL_ARG(also_over_items, true)
 OPTIONAL_LABEL_ARG(str_id)
 OPTIONAL_INT_ARG(mouse_button, 1)
 CALL_FUNCTION(BeginPopupContextWindow, bool, also_over_items, str_id, mouse_button)
-IF_RET_ADD_END_STACK(7)
+IF_RET_ADD_END_STACK(8)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API bool          BeginPopupContextVoid(const char* str_id = NULL, int mouse_button = 1);                                 // helper to open and begin popup when clicked in void (no window)
@@ -935,13 +997,13 @@ IMGUI_FUNCTION(BeginPopupContextVoid)
 OPTIONAL_LABEL_ARG(str_id)
 OPTIONAL_INT_ARG(mouse_button, 1)
 CALL_FUNCTION(BeginPopupContextVoid, bool, str_id, mouse_button)
-IF_RET_ADD_END_STACK(7)
+IF_RET_ADD_END_STACK(8)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API void          EndPopup();
 IMGUI_FUNCTION(EndPopup)
 CALL_FUNCTION_NO_RET(EndPopup)
-POP_END_STACK(7)
+POP_END_STACK(8)
 END_IMGUI_FUNC
 //    IMGUI_API void          CloseCurrentPopup();                                                // close the popup we have begin-ed into. clicking on a MenuItem or Selectable automatically close the current popup.
 IMGUI_FUNCTION(CloseCurrentPopup)
@@ -1067,7 +1129,7 @@ IMGUI_FUNCTION(CalcItemRectClosestPoint)
 IM_VEC_2_ARG(pos)
 OPTIONAL_BOOL_ARG(on_edge, false)
 OPTIONAL_NUMBER_ARG(outward, +0.0f)
-CALL_FUNCTION(CalcItemRectClosestPoint, ImVec2, pos, on_edge, +0.0f)
+CALL_FUNCTION(CalcItemRectClosestPoint, ImVec2, pos, on_edge, outward)
 PUSH_NUMBER(ret.x)
 PUSH_NUMBER(ret.y)
 END_IMGUI_FUNC
@@ -1077,7 +1139,7 @@ LABEL_ARG(text)
 OPTIONAL_LABEL_ARG(text_end)
 OPTIONAL_BOOL_ARG(hide_text_after_double_hash, false)
 OPTIONAL_NUMBER_ARG(wrap_width, -1.0f)
-CALL_FUNCTION(CalcTextSize, ImVec2, text, text_end, hide_text_after_double_hash, -1.0f)
+CALL_FUNCTION(CalcTextSize, ImVec2, text, text_end, hide_text_after_double_hash, wrap_width)
 PUSH_NUMBER(ret.x)
 PUSH_NUMBER(ret.y)
 END_IMGUI_FUNC
@@ -1089,7 +1151,7 @@ END_IMGUI_FUNC
 //    IMGUI_API void          EndChildFrame();
 IMGUI_FUNCTION(EndChildFrame)
 CALL_FUNCTION_NO_RET(EndChildFrame)
-POP_END_STACK(8)
+POP_END_STACK(9)
 END_IMGUI_FUNC
 //    IMGUI_API ImVec4        ColorConvertU32ToFloat4(ImU32 in);
 // Unsupported return type ImVec4
@@ -1173,7 +1235,7 @@ END_IMGUI_FUNC
 IMGUI_FUNCTION(IsMouseDragging)
 OPTIONAL_INT_ARG(button, 0)
 OPTIONAL_NUMBER_ARG(lock_threshold, -1.0f)
-CALL_FUNCTION(IsMouseDragging, bool, button, -1.0f)
+CALL_FUNCTION(IsMouseDragging, bool, button, lock_threshold)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API ImVec2        GetMousePos();                                                      // shortcut to ImGui::GetIO().MousePos provided by user, to be consistent with other calls
@@ -1192,7 +1254,7 @@ END_IMGUI_FUNC
 IMGUI_FUNCTION(GetMouseDragDelta)
 OPTIONAL_INT_ARG(button, 0)
 OPTIONAL_NUMBER_ARG(lock_threshold, -1.0f)
-CALL_FUNCTION(GetMouseDragDelta, ImVec2, button, -1.0f)
+CALL_FUNCTION(GetMouseDragDelta, ImVec2, button, lock_threshold)
 PUSH_NUMBER(ret.x)
 PUSH_NUMBER(ret.y)
 END_IMGUI_FUNC
@@ -1240,10 +1302,11 @@ END_STACK_START
 END_STACK_OPTION(0, End)
 END_STACK_OPTION(1, EndChild)
 END_STACK_OPTION(2, EndGroup)
-END_STACK_OPTION(3, EndTooltip)
-END_STACK_OPTION(4, EndMainMenuBar)
-END_STACK_OPTION(5, EndMenuBar)
-END_STACK_OPTION(6, EndMenu)
-END_STACK_OPTION(7, EndPopup)
-END_STACK_OPTION(8, EndChildFrame)
+END_STACK_OPTION(3, TreePop)
+END_STACK_OPTION(4, EndTooltip)
+END_STACK_OPTION(5, EndMainMenuBar)
+END_STACK_OPTION(6, EndMenuBar)
+END_STACK_OPTION(7, EndMenu)
+END_STACK_OPTION(8, EndPopup)
+END_STACK_OPTION(9, EndChildFrame)
 END_STACK_END
