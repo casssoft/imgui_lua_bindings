@@ -1,7 +1,9 @@
 #These are imgui bindings for lua.#
 
 ImGui https://github.com/ocornut/imgui
+
 It supports a lot of common imgui operations except for initializing imgui.
+
 Supported functions: 177 Unsupported functions 101 for 1.47 (WIP)
 
 ##How to call these imgui bindings from lua##
@@ -78,6 +80,7 @@ This creates a file with info about imgui functions from the imgui.h file.
 Then copy the macro definitions in imgui_lua_bindings.cpp and include imgui_iterator.cpp in that the cpp file. This will generate static int impl_FunctionName(lua_State*L) {} functions for each imgui function. Bind these to lua functions and your good to go. (Check out imgui_lua_bindings.cpp for a full example)
 
 The imgui_lua_bindings.cpp has two functions RunString and LoadImguiBindings
+
 To use the functions there first assign the global lState to a valid lua_State, then call LoadImguiBindings then run as many strings as you want.
 
 ##What is ENABLE_IM_LUA_END_STACK?##
