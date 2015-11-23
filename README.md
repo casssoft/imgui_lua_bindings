@@ -4,7 +4,7 @@ ImGui https://github.com/ocornut/imgui
 
 It supports a lot of common imgui operations except for initializing imgui.
 
-Supported functions: 182 Unsupported functions 96 for 1.47 (WIP)
+Supported functions: 195 Unsupported functions 83 for 1.47 (WIP)
 
 ##How to call these imgui bindings from lua##
 

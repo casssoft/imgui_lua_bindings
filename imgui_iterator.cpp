@@ -72,7 +72,15 @@ IF_RET_ADD_END_STACK(1)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API bool          BeginChild(ImGuiID id, const ImVec2& size = ImVec2 0 0, bool border = false, ImGuiWindowFlags extra_flags = 0);          // "
-// Unsupported arg type ImGuiID id
+IMGUI_FUNCTION(BeginChild_4)
+UINT_ARG(id)
+IM_VEC_2_ARG(size)
+OPTIONAL_BOOL_ARG(border, false)
+OPTIONAL_INT_ARG(extra_flags, 0)
+CALL_FUNCTION(BeginChild, bool, id, size, border, extra_flags)
+IF_RET_ADD_END_STACK(1)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
 //    IMGUI_API void          EndChild();
 IMGUI_FUNCTION(EndChild)
 CALL_FUNCTION_NO_RET(EndChild)
@@ -519,11 +527,19 @@ IMGUI_FUNCTION(PopID)
 CALL_FUNCTION_NO_RET(PopID)
 END_IMGUI_FUNC
 //    IMGUI_API ImGuiID       GetID(const char* str_id);                                          // calculate unique ID (hash of whole ID stack + given parameter). useful if you want to query into ImGuiStorage yourself. otherwise rarely needed
-// Unsupported return type ImGuiID
+IMGUI_FUNCTION(GetID)
+LABEL_ARG(str_id)
+CALL_FUNCTION(GetID, unsigned int, str_id)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
 //    IMGUI_API ImGuiID       GetID(const char* str_id_begin, const char* str_id_end);
-// Unsupported return type ImGuiID
+IMGUI_FUNCTION(GetID_2)
+LABEL_ARG(str_id_begin)
+LABEL_ARG(str_id_end)
+CALL_FUNCTION(GetID, unsigned int, str_id_begin, str_id_end)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
 //    IMGUI_API ImGuiID       GetID(const void* ptr_id);
-// Unsupported return type ImGuiID
 // Unsupported arg type const void* ptr_id
 //    IMGUI_API void          Text(const char* fmt, ...) IM_PRINTFARGS(1);
 // Unsupported arg type  ...) IM_PRINTFARGS(1
@@ -621,7 +637,14 @@ PUSH_BOOL(ret)
 END_BOOL_POINTER(v)
 END_IMGUI_FUNC
 //    IMGUI_API bool          CheckboxFlags(const char* label, unsigned int* flags, unsigned int flags_value);
-// Unsupported arg type  unsigned int* flags
+IMGUI_FUNCTION(CheckboxFlags)
+LABEL_ARG(label)
+UINT_POINTER_ARG(flags)
+UINT_ARG(flags_value)
+CALL_FUNCTION(CheckboxFlags, bool, label, flags, flags_value)
+PUSH_BOOL(ret)
+END_UINT_POINTER(flags)
+END_IMGUI_FUNC
 //    IMGUI_API bool          RadioButton(const char* label, bool active);
 IMGUI_FUNCTION(RadioButton)
 LABEL_ARG(label)
@@ -630,14 +653,27 @@ CALL_FUNCTION(RadioButton, bool, label, active)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API bool          RadioButton(const char* label, int* v, int v_button);
-// Unsupported arg type  int* v
+IMGUI_FUNCTION(RadioButton_3)
+LABEL_ARG(label)
+INT_POINTER_ARG(v)
+INT_ARG(v_button)
+CALL_FUNCTION(RadioButton, bool, label, v, v_button)
+PUSH_BOOL(ret)
+END_INT_POINTER(v)
+END_IMGUI_FUNC
 //    IMGUI_API bool          Combo(const char* label, int* current_item, const char** items, int items_count, int height_in_items = -1);
-// Unsupported arg type  int* current_item
 // Unsupported arg type  const char** items
 //    IMGUI_API bool          Combo(const char* label, int* current_item, const char* items_separated_by_zeros, int height_in_items = -1);      // separate items with \0, end item-list with \0\0
-// Unsupported arg type  int* current_item
+IMGUI_FUNCTION(Combo)
+LABEL_ARG(label)
+INT_POINTER_ARG(current_item)
+LABEL_ARG(items_separated_by_zeros)
+OPTIONAL_INT_ARG(height_in_items, -1)
+CALL_FUNCTION(Combo, bool, label, current_item, items_separated_by_zeros, height_in_items)
+PUSH_BOOL(ret)
+END_INT_POINTER(current_item)
+END_IMGUI_FUNC
 //    IMGUI_API bool          Combo(const char* label, int* current_item, bool (*items_getter)(void* data, int idx, const char** out_text), void* data, int items_count, int height_in_items = -1);
-// Unsupported arg type  int* current_item
 // Unsupported arg type  bool (*items_getter)(void* data
 // Unsupported arg type  const char** out_text)
 // Unsupported arg type  void* data
@@ -702,7 +738,17 @@ END_FLOAT_POINTER(v_current_min)
 END_FLOAT_POINTER(v_current_max)
 END_IMGUI_FUNC
 //    IMGUI_API bool          DragInt(const char* label, int* v, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* display_format = "%.0f");                                       // If v_min >= v_max we have no bound
-// Unsupported arg type  int* v
+IMGUI_FUNCTION(DragInt)
+LABEL_ARG(label)
+INT_POINTER_ARG(v)
+OPTIONAL_NUMBER_ARG(v_speed, 1.0f)
+OPTIONAL_INT_ARG(v_min, 0)
+OPTIONAL_INT_ARG(v_max, 0)
+LABEL_ARG(display_format)
+CALL_FUNCTION(DragInt, bool, label, v, v_speed, v_min, v_max, display_format)
+PUSH_BOOL(ret)
+END_INT_POINTER(v)
+END_IMGUI_FUNC
 //    IMGUI_API bool          DragInt2(const char* label, int v[2], float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* display_format = "%.0f");
 // Unsupported arg type  int v[2]
 //    IMGUI_API bool          DragInt3(const char* label, int v[3], float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* display_format = "%.0f");
@@ -710,8 +756,20 @@ END_IMGUI_FUNC
 //    IMGUI_API bool          DragInt4(const char* label, int v[4], float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* display_format = "%.0f");
 // Unsupported arg type  int v[4]
 //    IMGUI_API bool          DragIntRange2(const char* label, int* v_current_min, int* v_current_max, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* display_format = "%.0f", const char* display_format_max = NULL);
-// Unsupported arg type  int* v_current_min
-// Unsupported arg type  int* v_current_max
+IMGUI_FUNCTION(DragIntRange2)
+LABEL_ARG(label)
+INT_POINTER_ARG(v_current_min)
+INT_POINTER_ARG(v_current_max)
+OPTIONAL_NUMBER_ARG(v_speed, 1.0f)
+OPTIONAL_INT_ARG(v_min, 0)
+OPTIONAL_INT_ARG(v_max, 0)
+LABEL_ARG(display_format)
+OPTIONAL_LABEL_ARG(display_format_max)
+CALL_FUNCTION(DragIntRange2, bool, label, v_current_min, v_current_max, v_speed, v_min, v_max, display_format, display_format_max)
+PUSH_BOOL(ret)
+END_INT_POINTER(v_current_min)
+END_INT_POINTER(v_current_max)
+END_IMGUI_FUNC
 //    IMGUI_API bool          InputText(const char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags = 0, ImGuiTextEditCallback callback = NULL, void* user_data = NULL);
 // Unsupported arg type  char* buf
 // Unsupported arg type  size_t buf_size
@@ -741,7 +799,16 @@ END_IMGUI_FUNC
 //    IMGUI_API bool          InputFloat4(const char* label, float v[4], int decimal_precision = -1, ImGuiInputTextFlags extra_flags = 0);
 // Unsupported arg type  float v[4]
 //    IMGUI_API bool          InputInt(const char* label, int* v, int step = 1, int step_fast = 100, ImGuiInputTextFlags extra_flags = 0);
-// Unsupported arg type  int* v
+IMGUI_FUNCTION(InputInt)
+LABEL_ARG(label)
+INT_POINTER_ARG(v)
+OPTIONAL_INT_ARG(step, 1)
+OPTIONAL_INT_ARG(step_fast, 100)
+OPTIONAL_INT_ARG(extra_flags, 0)
+CALL_FUNCTION(InputInt, bool, label, v, step, step_fast, extra_flags)
+PUSH_BOOL(ret)
+END_INT_POINTER(v)
+END_IMGUI_FUNC
 //    IMGUI_API bool          InputInt2(const char* label, int v[2], ImGuiInputTextFlags extra_flags = 0);
 // Unsupported arg type  int v[2]
 //    IMGUI_API bool          InputInt3(const char* label, int v[3], ImGuiInputTextFlags extra_flags = 0);
@@ -777,7 +844,16 @@ PUSH_BOOL(ret)
 END_FLOAT_POINTER(v_rad)
 END_IMGUI_FUNC
 //    IMGUI_API bool          SliderInt(const char* label, int* v, int v_min, int v_max, const char* display_format = "%.0f");
-// Unsupported arg type  int* v
+IMGUI_FUNCTION(SliderInt)
+LABEL_ARG(label)
+INT_POINTER_ARG(v)
+INT_ARG(v_min)
+INT_ARG(v_max)
+LABEL_ARG(display_format)
+CALL_FUNCTION(SliderInt, bool, label, v, v_min, v_max, display_format)
+PUSH_BOOL(ret)
+END_INT_POINTER(v)
+END_IMGUI_FUNC
 //    IMGUI_API bool          SliderInt2(const char* label, int v[2], int v_min, int v_max, const char* display_format = "%.0f");
 // Unsupported arg type  int v[2]
 //    IMGUI_API bool          SliderInt3(const char* label, int v[3], int v_min, int v_max, const char* display_format = "%.0f");
@@ -798,7 +874,17 @@ PUSH_BOOL(ret)
 END_FLOAT_POINTER(v)
 END_IMGUI_FUNC
 //    IMGUI_API bool          VSliderInt(const char* label, const ImVec2& size, int* v, int v_min, int v_max, const char* display_format = "%.0f");
-// Unsupported arg type  int* v
+IMGUI_FUNCTION(VSliderInt)
+LABEL_ARG(label)
+IM_VEC_2_ARG(size)
+INT_POINTER_ARG(v)
+INT_ARG(v_min)
+INT_ARG(v_max)
+LABEL_ARG(display_format)
+CALL_FUNCTION(VSliderInt, bool, label, size, v, v_min, v_max, display_format)
+PUSH_BOOL(ret)
+END_INT_POINTER(v)
+END_IMGUI_FUNC
 //    IMGUI_API bool          TreeNode(const char* str_label_id);                                     // if returning 'true' the node is open and the user is responsible for calling TreePop()
 IMGUI_FUNCTION(TreeNode)
 LABEL_ARG(str_label_id)
@@ -855,10 +941,8 @@ PUSH_BOOL(ret)
 END_BOOL_POINTER(p_selected)
 END_IMGUI_FUNC
 //    IMGUI_API bool          ListBox(const char* label, int* current_item, const char** items, int items_count, int height_in_items = -1);
-// Unsupported arg type  int* current_item
 // Unsupported arg type  const char** items
 //    IMGUI_API bool          ListBox(const char* label, int* current_item, bool (*items_getter)(void* data, int idx, const char** out_text), void* data, int items_count, int height_in_items = -1);
-// Unsupported arg type  int* current_item
 // Unsupported arg type  bool (*items_getter)(void* data
 // Unsupported arg type  const char** out_text)
 // Unsupported arg type  void* data
@@ -1173,10 +1257,24 @@ PUSH_NUMBER(ret.x)
 PUSH_NUMBER(ret.y)
 END_IMGUI_FUNC
 //    IMGUI_API void          CalcListClipping(int items_count, float items_height, int* out_items_display_start, int* out_items_display_end);    // calculate coarse clipping for large list of evenly sized items. Prefer using the ImGuiListClipper higher-level helper if you can.
-// Unsupported arg type  int* out_items_display_start
-// Unsupported arg type  int* out_items_display_end
+IMGUI_FUNCTION(CalcListClipping)
+INT_ARG(items_count)
+NUMBER_ARG(items_height)
+INT_POINTER_ARG(out_items_display_start)
+INT_POINTER_ARG(out_items_display_end)
+CALL_FUNCTION_NO_RET(CalcListClipping, items_count, items_height, out_items_display_start, out_items_display_end)
+END_INT_POINTER(out_items_display_start)
+END_INT_POINTER(out_items_display_end)
+END_IMGUI_FUNC
 //    IMGUI_API bool          BeginChildFrame(ImGuiID id, const ImVec2& size, ImGuiWindowFlags extra_flags = 0);	// helper to create a child window / scrolling region that looks like a normal widget frame
-// Unsupported arg type ImGuiID id
+IMGUI_FUNCTION(BeginChildFrame)
+UINT_ARG(id)
+IM_VEC_2_ARG(size)
+OPTIONAL_INT_ARG(extra_flags, 0)
+CALL_FUNCTION(BeginChildFrame, bool, id, size, extra_flags)
+IF_RET_ADD_END_STACK(9)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
 //    IMGUI_API void          EndChildFrame();
 IMGUI_FUNCTION(EndChildFrame)
 CALL_FUNCTION_NO_RET(EndChildFrame)
@@ -1184,9 +1282,7 @@ POP_END_STACK(9)
 END_IMGUI_FUNC
 //    IMGUI_API ImVec4        ColorConvertU32ToFloat4(ImU32 in);
 // Unsupported return type ImVec4
-// Unsupported arg type ImU32 in
 //    IMGUI_API ImU32         ColorConvertFloat4ToU32(const ImVec4& in);
-// Unsupported return type ImU32
 // Unsupported arg type const ImVec4& in
 //    IMGUI_API void          ColorConvertRGBtoHSV(float r, float g, float b, float& out_h, float& out_s, float& out_v);
 // Unsupported arg type  float& out_h

@@ -95,22 +95,22 @@ static int impl_##name(lua_State *L) { \
   }
 
 #define LABEL_ARG(name) \
-  size_t name##_size; \
-  const char * name = luaL_checklstring(L, arg++, &(name##_size));
+  size_t i_##name##_size; \
+  const char * name = luaL_checklstring(L, arg++, &(i_##name##_size));
 
 #define IM_VEC_2_ARG(name)\
-  const lua_Number name##_x = luaL_checknumber(L, arg++); \
-  const lua_Number name##_y = luaL_checknumber(L, arg++); \
-  const ImVec2 name((double)name##_x, (double)name##_y);
+  const lua_Number i_##name##_x = luaL_checknumber(L, arg++); \
+  const lua_Number i_##name##_y = luaL_checknumber(L, arg++); \
+  const ImVec2 name((double)i_##name##_x, (double)i_##name##_y);
 
 #define OPTIONAL_IM_VEC_2_ARG(name, x, y) \
-  lua_Number name##_x = x; \
-  lua_Number name##_y = y; \
+  lua_Number i_##name##_x = x; \
+  lua_Number i_##name##_y = y; \
   if (arg <= max_args - 1) { \
-    name##_x = luaL_checknumber(L, arg++); \
-    name##_y = luaL_checknumber(L, arg++); \
+    i_##name##_x = luaL_checknumber(L, arg++); \
+    i_##name##_y = luaL_checknumber(L, arg++); \
   } \
-  const ImVec2 name((double)name##_x, (double)name##_y);
+  const ImVec2 name((double)i_##name##_x, (double)i_##name##_y);
 
 #define NUMBER_ARG(name)\
   lua_Number name = luaL_checknumber(L, arg++);
@@ -122,12 +122,12 @@ static int impl_##name(lua_State *L) { \
   }
 
 #define FLOAT_POINTER_ARG(name) \
-  float name##_value = luaL_checknumber(L, arg++); \
-  float* name = &(name##_value);
+  float i_##name##_value = luaL_checknumber(L, arg++); \
+  float* name = &(i_##name##_value);
 
 #define END_FLOAT_POINTER(name) \
   if (name != NULL) { \
-    lua_pushnumber(L, name##_value); \
+    lua_pushnumber(L, i_##name##_value); \
     stackval++; \
   }
 
@@ -149,16 +149,36 @@ static int impl_##name(lua_State *L) { \
 #define UINT_ARG(name) \
   const unsigned int name = (unsigned int)luaL_checkinteger(L, arg++);
 
+#define INT_POINTER_ARG(name) \
+  int i_##name##_value = (int)luaL_checkinteger(L, arg++); \
+  int* name = &(i_##name##_value);
+
+#define END_INT_POINTER(name) \
+  if (name != NULL) { \
+    lua_pushnumber(L, i_##name##_value); \
+    stackval++; \
+  }
+
+#define UINT_POINTER_ARG(name) \
+  unsigned int i_##name##_value = (unsigned int)luaL_checkinteger(L, arg++); \
+  unsigned int* name = &(i_##name##_value);
+
+#define END_UINT_POINTER(name) \
+  if (name != NULL) { \
+    lua_pushnumber(L, i_##name##_value); \
+    stackval++; \
+  }
+
 #define BOOL_POINTER_ARG(name) \
-  bool name##_value = lua_toboolean(L, arg++); \
-  bool* name = &(name##_value);
+  bool i_##name##_value = lua_toboolean(L, arg++); \
+  bool* name = &(i_##name##_value);
 
 #define OPTIONAL_BOOL_POINTER_ARG(name) \
-  bool name##_value; \
+  bool i_##name##_value; \
   bool* name = NULL; \
   if (arg <= max_args) { \
-    name##_value = lua_toboolean(L, arg++); \
-    name = &(name##_value); \
+    i_##name##_value = lua_toboolean(L, arg++); \
+    name = &(i_##name##_value); \
   }
 
 #define OPTIONAL_BOOL_ARG(name, otherwise) \
@@ -186,7 +206,7 @@ static int impl_##name(lua_State *L) { \
 
 #define END_BOOL_POINTER(name) \
   if (name != NULL) { \
-    lua_pushboolean(L, (int)name##_value); \
+    lua_pushboolean(L, (int)i_##name##_value); \
     stackval++; \
   }
 
@@ -259,6 +279,14 @@ static const struct luaL_Reg imguilib [] = {
 #define OPTIONAL_UINT_ARG(name, otherwise)
 #undef UINT_ARG
 #define UINT_ARG(name)
+#undef INT_POINTER_ARG
+#define INT_POINTER_ARG(name)
+#undef END_INT_POINTER
+#define END_INT_POINTER(name)
+#undef UINT_POINTER_ARG
+#define UINT_POINTER_ARG(name)
+#undef END_UINT_POINTER
+#define END_UINT_POINTER(name)
 #undef BOOL_POINTER_ARG
 #define BOOL_POINTER_ARG(name)
 #undef OPTIONAL_BOOL_POINTER_ARG

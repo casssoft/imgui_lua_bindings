@@ -72,13 +72,12 @@ while ($line = <STDIN>) {
     # macro used for calling function
     my $callMacro;
     # if it has a return value (yes I know this is not the cleanest code)
-    my $hasRet;
+    my $hasRet = 1;
     if ($1 =~ /^void$/) {
       $callMacro = "CALL_FUNCTION_NO_RET";
       $hasRet = 0;
     } elsif ($1 =~ /^bool$/) {
       $callMacro = "CALL_FUNCTION";
-      $hasRet = 1;
       push(@funcArgs, "bool");
       push(@after, "PUSH_BOOL(ret)");
     } elsif ($1 =~ /^float$/) {
@@ -90,6 +89,10 @@ while ($line = <STDIN>) {
       push(@funcArgs, "ImVec2");
       push(@after, "PUSH_NUMBER(ret.x)");
       push(@after, "PUSH_NUMBER(ret.y)");
+    } elsif ($1 =~ /^(unsigned int|ImGuiID|ImU32)$/) {
+      $callMacro = "CALL_FUNCTION";
+      push(@funcArgs, "unsigned int");
+      push(@after, "PUSH_BOOL(ret)");
     } else {
       print "// Unsupported return type $1\n";
       $shouldPrint = 0;
@@ -159,8 +162,8 @@ while ($line = <STDIN>) {
         }
         push(@funcArgs, $name);
       #unsigned int with default value or not
-      } elsif ($args[$i] =~ m/^ *unsigned +int ([^ =\[]*)( = [^ ]*|) *$/) {
-        my $name = $1;
+      } elsif ($args[$i] =~ m/^ *(unsigned +int|ImGuiID|ImU32) ([^ =\[]*)( = [^ ]*|) *$/) {
+        my $name = $2;
         if ($2 =~ m/^ = ([^ ]*)$/) {
           push(@before, "OPTIONAL_UINT_ARG($name, $1)");
         } else {
@@ -176,6 +179,18 @@ while ($line = <STDIN>) {
           push(@before, "BOOL_ARG($name)");
         }
         push(@funcArgs, $name);
+      # int * x
+      } elsif ($args[$i] =~ m/^ *int *\* *([^ =\[]*)$/) {
+        my $name = $1;
+        push(@before, "INT_POINTER_ARG($name)");
+        push(@funcArgs, $name);
+        push(@after, "END_INT_POINTER($name)");
+      # unsigned int * x
+      } elsif ($args[$i] =~ m/^ *unsigned +int *\* *([^ =\[]*)$/) {
+        my $name = $1;
+        push(@before, "UINT_POINTER_ARG($name)");
+        push(@funcArgs, $name);
+        push(@after, "END_UINT_POINTER($name)");
         # we don't support variadic functions yet but we let you use it without extra variables
       } elsif ($args[$i] =~ m/^ *\.\.\. *$/) {
         print "// Variadic functions aren't suppported but here it is anyway\n";
