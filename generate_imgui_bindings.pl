@@ -137,7 +137,7 @@ while ($line = <STDIN>) {
       #const ImVec2& size with or without default value of ImVec(0,0)
       } elsif ($args[$i] =~ m/^ *const ImVec2& ([^ ]*) *(= * ImVec2 0 0|) *$/) {
         my $name = $1;
-        if ($2 =~ m/^= * ImVec 0 0$/) {
+        if ($2 =~ m/^= * ImVec2 0 0$/) {
           push(@before, "OPTIONAL_IM_VEC_2_ARG($name, 0, 0)");
         } else {
           push(@before, "IM_VEC_2_ARG($name)");
