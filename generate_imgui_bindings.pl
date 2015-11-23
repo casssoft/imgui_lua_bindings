@@ -50,6 +50,8 @@ my @endTypes;
 while ($line = <STDIN>) {
   #replace ImVec2(x, y) with ImVec2 x, y so it's easier for regex
   $line =~ s/ImVec2\(([^,]*),([^\)]*)\)/ImVec2 $1 $2/g;
+  #delete this so it's eaiser for regexes
+  $line =~ s/ IM_PRINTFARGS\(.\);/;/g;
   if ($line =~ m/ *IMGUI_API *([^ ]+) *([^\(]+)\(([^\;]*)\);/) {
     print "//" . $line;
     # this will be set to 0 if something is not supported yet
