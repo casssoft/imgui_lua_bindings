@@ -103,6 +103,15 @@ static int impl_##name(lua_State *L) { \
   const lua_Number name##_y = luaL_checknumber(L, arg++); \
   const ImVec2 name((double)name##_x, (double)name##_y);
 
+#define OPTIONAL_IM_VEC_2_ARG(name, x, y) \
+  lua_Number name##_x = x; \
+  lua_Number name##_y = y; \
+  if (arg <= max_args - 1) { \
+    name##_x = luaL_checknumber(L, arg++); \
+    name##_y = luaL_checknumber(L, arg++); \
+  } \
+  const ImVec2 name((double)name##_x, (double)name##_y);
+
 #define NUMBER_ARG(name)\
   lua_Number name = luaL_checknumber(L, arg++);
 
@@ -218,15 +227,6 @@ static void ImEndStack(int type) { \
 #define POP_END_STACK(type)
 #endif
 
-// Button not supported yet
-// because of ImVec2 with default value
-// so we are defining it ourselves
-
-IMGUI_FUNCTION(Button)
-LABEL_ARG(label)
-CALL_FUNCTION(Button, bool, label)
-PUSH_BOOL(ret)
-END_IMGUI_FUNC
 #include "imgui_iterator.cpp"
 
 
@@ -241,6 +241,8 @@ static const struct luaL_Reg imguilib [] = {
 #define LABEL_ARG(name)
 #undef IM_VEC_2_ARG
 #define IM_VEC_2_ARG(name)
+#undef OPTIONAL_IM_VEC_2_ARG
+#define OPTIONAL_IM_VEC_2_ARG(name, x, y)
 #undef NUMBER_ARG
 #define NUMBER_ARG(name)
 #undef OPTIONAL_NUMBER_ARG

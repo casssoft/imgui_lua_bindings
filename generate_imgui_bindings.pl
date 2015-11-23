@@ -129,10 +129,15 @@ while ($line = <STDIN>) {
           push(@before, "LABEL_ARG($name)");
         }
         push(@funcArgs, $name);
-        # const ImVec2 a (with default value not supported yet
-      } elsif ($args[$i] =~ m/^ *const ImVec2& ([^ ]*) *$/) {
-        push(@before, "IM_VEC_2_ARG($1)");
-        push(@funcArgs, $1);
+      #const ImVec2& size with or without default value of ImVec(0,0)
+      } elsif ($args[$i] =~ m/^ *const ImVec2& ([^ ]*) *(= * ImVec2 0 0|) *$/) {
+        my $name = $1;
+        if ($2 =~ m/^= * ImVec 0 0$/) {
+          push(@before, "OPTIONAL_IM_VEC_2_ARG($name, 0, 0)");
+        } else {
+          push(@before, "IM_VEC_2_ARG($name)");
+        }
+        push(@funcArgs, $name);
         # one of the various enums
         # we are handling these as ints
       } elsif ($args[$i] =~ m/^ *(ImGuiWindowFlags|ImGuiCol|ImGuiStyleVar|ImGuiKey|ImGuiAlign|ImGuiColorEditMode|ImGuiMouseCursor|ImGuiSetCond|ImGuiInputTextFlags|ImGuiSelectableFlags) ([^ ]*)( = 0|) *$/) {

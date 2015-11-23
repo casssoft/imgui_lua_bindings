@@ -62,10 +62,17 @@ CALL_FUNCTION_NO_RET(End)
 POP_END_STACK(0)
 END_IMGUI_FUNC
 //    IMGUI_API bool          BeginChild(const char* str_id, const ImVec2& size = ImVec2 0 0, bool border = false, ImGuiWindowFlags extra_flags = 0);  // begin a scrolling region. size==0.0f: use remaining window size, size<0.0f: use remaining window size minus abs(size). size>0.0f: fixed size. each axis can use a different mode, e.g. ImVec2 0 400.
-// Unsupported arg type  const ImVec2& size = ImVec2 0 0
+IMGUI_FUNCTION(BeginChild)
+LABEL_ARG(str_id)
+IM_VEC_2_ARG(size)
+OPTIONAL_BOOL_ARG(border, false)
+OPTIONAL_INT_ARG(extra_flags, 0)
+CALL_FUNCTION(BeginChild, bool, str_id, size, border, extra_flags)
+IF_RET_ADD_END_STACK(1)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
 //    IMGUI_API bool          BeginChild(ImGuiID id, const ImVec2& size = ImVec2 0 0, bool border = false, ImGuiWindowFlags extra_flags = 0);          // "
 // Unsupported arg type ImGuiID id
-// Unsupported arg type  const ImVec2& size = ImVec2 0 0
 //    IMGUI_API void          EndChild();
 IMGUI_FUNCTION(EndChild)
 CALL_FUNCTION_NO_RET(EndChild)
@@ -555,7 +562,12 @@ END_IMGUI_FUNC
 //    IMGUI_API void          BulletTextV(const char* fmt, va_list args);
 // Unsupported arg type  va_list args
 //    IMGUI_API bool          Button(const char* label, const ImVec2& size = ImVec2 0 0);
-// Unsupported arg type  const ImVec2& size = ImVec2 0 0
+IMGUI_FUNCTION(Button)
+LABEL_ARG(label)
+IM_VEC_2_ARG(size)
+CALL_FUNCTION(Button, bool, label, size)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
 //    IMGUI_API bool          SmallButton(const char* label);
 IMGUI_FUNCTION(SmallButton)
 LABEL_ARG(label)
@@ -571,7 +583,6 @@ PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API void          Image(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0 = ImVec2 0 0, const ImVec2& uv1 = ImVec2 1 1, const ImVec4& tint_col = ImVec4(1,1,1,1), const ImVec4& border_col = ImVec4(0,0,0,0));
 // Unsupported arg type ImTextureID user_texture_id
-// Unsupported arg type  const ImVec2& uv0 = ImVec2 0 0
 // Unsupported arg type  const ImVec2& uv1 = ImVec2 1 1
 // Unsupported arg type  const ImVec4& tint_col = ImVec4(1
 // Unsupported arg type 1
@@ -583,7 +594,6 @@ END_IMGUI_FUNC
 // Unsupported arg type 0)
 //    IMGUI_API bool          ImageButton(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0 = ImVec2 0 0,  const ImVec2& uv1 = ImVec2 1 1, int frame_padding = -1, const ImVec4& bg_col = ImVec4(0,0,0,0), const ImVec4& tint_col = ImVec4(1,1,1,1));    // <0 frame_padding uses default frame padding settings. 0 for no padding
 // Unsupported arg type ImTextureID user_texture_id
-// Unsupported arg type  const ImVec2& uv0 = ImVec2 0 0
 // Unsupported arg type   const ImVec2& uv1 = ImVec2 1 1
 // Unsupported arg type  const ImVec4& bg_col = ImVec4(0
 // Unsupported arg type 0
@@ -710,7 +720,6 @@ END_IMGUI_FUNC
 //    IMGUI_API bool          InputTextMultiline(const char* label, char* buf, size_t buf_size, const ImVec2& size = ImVec2 0 0, ImGuiInputTextFlags flags = 0, ImGuiTextEditCallback callback = NULL, void* user_data = NULL);
 // Unsupported arg type  char* buf
 // Unsupported arg type  size_t buf_size
-// Unsupported arg type  const ImVec2& size = ImVec2 0 0
 // Unsupported arg type  ImGuiTextEditCallback callback = NULL
 // Unsupported arg type  void* user_data = NULL
 //    IMGUI_API bool          InputFloat(const char* label, float* v, float step = 0.0f, float step_fast = 0.0f, int decimal_precision = -1, ImGuiInputTextFlags extra_flags = 0);
@@ -827,9 +836,24 @@ OPTIONAL_INT_ARG(cond, 0)
 CALL_FUNCTION_NO_RET(SetNextTreeNodeOpened, opened, cond)
 END_IMGUI_FUNC
 //    IMGUI_API bool          Selectable(const char* label, bool selected = false, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2 0 0);  // size.x==0.0: use remaining width, size.x>0.0: specify width. size.y==0.0: use label height, size.y>0.0: specify height
-// Unsupported arg type  const ImVec2& size = ImVec2 0 0
+IMGUI_FUNCTION(Selectable)
+LABEL_ARG(label)
+OPTIONAL_BOOL_ARG(selected, false)
+OPTIONAL_INT_ARG(flags, 0)
+IM_VEC_2_ARG(size)
+CALL_FUNCTION(Selectable, bool, label, selected, flags, size)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
 //    IMGUI_API bool          Selectable(const char* label, bool* p_selected, ImGuiSelectableFlags flags = 0, const ImVec2& size = ImVec2 0 0);
-// Unsupported arg type  const ImVec2& size = ImVec2 0 0
+IMGUI_FUNCTION(Selectable_4)
+LABEL_ARG(label)
+BOOL_POINTER_ARG(p_selected)
+OPTIONAL_INT_ARG(flags, 0)
+IM_VEC_2_ARG(size)
+CALL_FUNCTION(Selectable, bool, label, p_selected, flags, size)
+PUSH_BOOL(ret)
+END_BOOL_POINTER(p_selected)
+END_IMGUI_FUNC
 //    IMGUI_API bool          ListBox(const char* label, int* current_item, const char** items, int items_count, int height_in_items = -1);
 // Unsupported arg type  int* current_item
 // Unsupported arg type  const char** items
@@ -839,9 +863,14 @@ END_IMGUI_FUNC
 // Unsupported arg type  const char** out_text)
 // Unsupported arg type  void* data
 //    IMGUI_API bool          ListBoxHeader(const char* label, const ImVec2& size = ImVec2 0 0); // use if you want to reimplement ListBox() will custom data or interactions. make sure to call ListBoxFooter() afterwards.
-// Unsupported arg type  const ImVec2& size = ImVec2 0 0
-//    IMGUI_API bool          ListBoxHeader(const char* label, int items_count, int height_in_items = -1); // "
 IMGUI_FUNCTION(ListBoxHeader)
+LABEL_ARG(label)
+IM_VEC_2_ARG(size)
+CALL_FUNCTION(ListBoxHeader, bool, label, size)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
+//    IMGUI_API bool          ListBoxHeader(const char* label, int items_count, int height_in_items = -1); // "
+IMGUI_FUNCTION(ListBoxHeader_3)
 LABEL_ARG(label)
 INT_ARG(items_count)
 OPTIONAL_INT_ARG(height_in_items, -1)
