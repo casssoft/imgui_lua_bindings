@@ -333,37 +333,104 @@ void LoadImguiBindings() {
   luaL_setfuncs(lState, imguilib, 0);
   lua_setglobal(lState, "imgui");
 
-// Enums not handled by iterator yet
-lua_pushnumber(lState, 1 << 0);
-lua_setglobal(lState, "ImGuiWindowFlags_NoTitleBar"); // Disable title-bar
-lua_pushnumber(lState, 1 << 1);
-lua_setglobal(lState, "ImGuiWindowFlags_NoResize"); // Disable user resizing with the lower-right grip
-lua_pushnumber(lState, 1 << 2);
-lua_setglobal(lState, "ImGuiWindowFlags_NoMove"); // Disable user moving the window
-lua_pushnumber(lState, 1 << 3);
-lua_setglobal(lState, "ImGuiWindowFlags_NoScrollbar"); // Disable scrollbar (window can still scroll with mouse or programatically)
-lua_pushnumber(lState, 1 << 4);
-lua_setglobal(lState, "ImGuiWindowFlags_NoScrollWithMouse"); // Disable user scrolling with mouse wheel
-lua_pushnumber(lState, 1 << 5);
-lua_setglobal(lState, "ImGuiWindowFlags_NoCollapse"); // Disable user collapsing window by double-clicking on it
-lua_pushnumber(lState, 1 << 6);
-lua_setglobal(lState, "ImGuiWindowFlags_AlwaysAutoResize"); // Resize every window to its content every frame
-lua_pushnumber(lState, 1 << 7);
-lua_setglobal(lState, "ImGuiWindowFlags_ShowBorders"); // Show borders around windows and items
-lua_pushnumber(lState, 1 << 8);
-lua_setglobal(lState, "ImGuiWindowFlags_NoSavedSettings"); // Never load/save settings in .ini file
-lua_pushnumber(lState, 1 << 9);
-lua_setglobal(lState, "ImGuiWindowFlags_NoInputs"); // Disable catching mouse or keyboard inputs
-lua_pushnumber(lState, 1 << 1);
-lua_setglobal(lState, "ImGuiWindowFlags_MenuBar"); // Has a menu-bar
-
-lua_pushnumber(lState, 1 << 0);
-lua_setglobal(lState, "ImGuiSetCond_Always"); // Set the variable
-lua_pushnumber(lState, 1 << 1);
-lua_setglobal(lState, "ImGuiSetCond_Once"); // Only set the variable on the first call per runtime session
-lua_pushnumber(lState, 1 << 2);
-lua_setglobal(lState, "ImGuiSetCond_FirstUseEver"); // Only set the variable if the window doesn't exist in the .ini file
-lua_pushnumber(lState, 1 << 3);
-lua_setglobal(lState, "ImGuiSetCond_Appearing"); // Only set the variable if the window is appearing after being inactive (or the first time)
+  // Enums not handled by iterator yet
+  lua_pushnumber(lState, ImGuiWindowFlags_NoTitleBar);
+  lua_setglobal(lState, "ImGuiWindowFlags_NoTitleBar");
+  lua_pushnumber(lState, ImGuiWindowFlags_NoResize);
+  lua_setglobal(lState, "ImGuiWindowFlags_NoResize");
+  lua_pushnumber(lState, ImGuiWindowFlags_NoMove);
+  lua_setglobal(lState, "ImGuiWindowFlags_NoMove");
+  lua_pushnumber(lState, ImGuiWindowFlags_NoScrollbar);
+  lua_setglobal(lState, "ImGuiWindowFlags_NoScrollbar");
+  lua_pushnumber(lState, ImGuiWindowFlags_NoScrollWithMouse);
+  lua_setglobal(lState, "ImGuiWindowFlags_NoScrollWithMouse");
+  lua_pushnumber(lState, ImGuiWindowFlags_NoCollapse);
+  lua_setglobal(lState, "ImGuiWindowFlags_NoCollapse");
+  lua_pushnumber(lState, ImGuiWindowFlags_AlwaysAutoResize);
+  lua_setglobal(lState, "ImGuiWindowFlags_AlwaysAutoResize");
+  lua_pushnumber(lState, ImGuiWindowFlags_ShowBorders);
+  lua_setglobal(lState, "ImGuiWindowFlags_ShowBorders");
+  lua_pushnumber(lState, ImGuiWindowFlags_NoSavedSettings);
+  lua_setglobal(lState, "ImGuiWindowFlags_NoSavedSettings");
+  lua_pushnumber(lState, ImGuiWindowFlags_NoInputs);
+  lua_setglobal(lState, "ImGuiWindowFlags_NoInputs");
+  lua_pushnumber(lState, ImGuiWindowFlags_MenuBar);
+  lua_setglobal(lState, "ImGuiWindowFlags_MenuBar");
+  lua_pushnumber(lState, ImGuiWindowFlags_HorizontalScrollbar);
+  lua_setglobal(lState, "ImGuiWindowFlags_HorizontalScrollbar");
+  lua_pushnumber(lState, ImGuiWindowFlags_NoFocusOnAppearing);
+  lua_setglobal(lState, "ImGuiWindowFlags_NoFocusOnAppearing");
+  lua_pushnumber(lState, ImGuiWindowFlags_NoBringToFrontOnFocus);
+  lua_setglobal(lState, "ImGuiWindowFlags_NoBringToFrontOnFocus");
+  lua_pushnumber(lState, ImGuiWindowFlags_ChildWindow);
+  lua_setglobal(lState, "ImGuiWindowFlags_ChildWindow");
+  lua_pushnumber(lState, ImGuiWindowFlags_ChildWindowAutoFitX);
+  lua_setglobal(lState, "ImGuiWindowFlags_ChildWindowAutoFitX");
+  lua_pushnumber(lState, ImGuiWindowFlags_ChildWindowAutoFitY);
+  lua_setglobal(lState, "ImGuiWindowFlags_ChildWindowAutoFitY");
+  lua_pushnumber(lState, ImGuiWindowFlags_ComboBox);
+  lua_setglobal(lState, "ImGuiWindowFlags_ComboBox");
+  lua_pushnumber(lState, ImGuiWindowFlags_Tooltip);
+  lua_setglobal(lState, "ImGuiWindowFlags_Tooltip");
+  lua_pushnumber(lState, ImGuiWindowFlags_Popup);
+  lua_setglobal(lState, "ImGuiWindowFlags_Popup");
+  lua_pushnumber(lState, ImGuiWindowFlags_Modal);
+  lua_setglobal(lState, "ImGuiWindowFlags_Modal");
+  lua_pushnumber(lState, ImGuiWindowFlags_ChildMenu);
+  lua_setglobal(lState, "ImGuiWindowFlags_ChildMenu");
+  lua_pushnumber(lState, ImGuiInputTextFlags_CharsDecimal);
+  lua_setglobal(lState, "ImGuiInputTextFlags_CharsDecimal");
+  lua_pushnumber(lState, ImGuiInputTextFlags_CharsHexadecimal);
+  lua_setglobal(lState, "ImGuiInputTextFlags_CharsHexadecimal");
+  lua_pushnumber(lState, ImGuiInputTextFlags_CharsUppercase);
+  lua_setglobal(lState, "ImGuiInputTextFlags_CharsUppercase");
+  lua_pushnumber(lState, ImGuiInputTextFlags_CharsNoBlank);
+  lua_setglobal(lState, "ImGuiInputTextFlags_CharsNoBlank");
+  lua_pushnumber(lState, ImGuiInputTextFlags_AutoSelectAll);
+  lua_setglobal(lState, "ImGuiInputTextFlags_AutoSelectAll");
+  lua_pushnumber(lState, ImGuiInputTextFlags_EnterReturnsTrue);
+  lua_setglobal(lState, "ImGuiInputTextFlags_EnterReturnsTrue");
+  lua_pushnumber(lState, ImGuiInputTextFlags_CallbackCompletion);
+  lua_setglobal(lState, "ImGuiInputTextFlags_CallbackCompletion");
+  lua_pushnumber(lState, ImGuiInputTextFlags_CallbackHistory);
+  lua_setglobal(lState, "ImGuiInputTextFlags_CallbackHistory");
+  lua_pushnumber(lState, ImGuiInputTextFlags_CallbackAlways);
+  lua_setglobal(lState, "ImGuiInputTextFlags_CallbackAlways");
+  lua_pushnumber(lState, ImGuiInputTextFlags_CallbackCharFilter);
+  lua_setglobal(lState, "ImGuiInputTextFlags_CallbackCharFilter");
+  lua_pushnumber(lState, ImGuiInputTextFlags_AllowTabInput);
+  lua_setglobal(lState, "ImGuiInputTextFlags_AllowTabInput");
+  lua_pushnumber(lState, ImGuiInputTextFlags_CtrlEnterForNewLine);
+  lua_setglobal(lState, "ImGuiInputTextFlags_CtrlEnterForNewLine");
+  lua_pushnumber(lState, ImGuiInputTextFlags_NoHorizontalScroll);
+  lua_setglobal(lState, "ImGuiInputTextFlags_NoHorizontalScroll");
+  lua_pushnumber(lState, ImGuiInputTextFlags_AlwaysInsertMode);
+  lua_setglobal(lState, "ImGuiInputTextFlags_AlwaysInsertMode");
+  lua_pushnumber(lState, ImGuiInputTextFlags_ReadOnly);
+  lua_setglobal(lState, "ImGuiInputTextFlags_ReadOnly");
+  lua_pushnumber(lState, ImGuiInputTextFlags_Password);
+  lua_setglobal(lState, "ImGuiInputTextFlags_Password");
+  lua_pushnumber(lState, ImGuiInputTextFlags_Multiline);
+  lua_setglobal(lState, "ImGuiInputTextFlags_Multiline");
+  lua_pushnumber(lState, ImGuiSelectableFlags_DontClosePopups);
+  lua_setglobal(lState, "ImGuiSelectableFlags_DontClosePopups");
+  lua_pushnumber(lState, ImGuiSelectableFlags_SpanAllColumns);
+  lua_setglobal(lState, "ImGuiSelectableFlags_SpanAllColumns");
+  lua_pushnumber(lState, ImGuiKey_Tab);
+  lua_setglobal(lState, "ImGuiKey_Tab");
+  lua_pushnumber(lState, ImGuiKey_LeftArrow);
+  lua_setglobal(lState, "ImGuiKey_LeftArrow");
+  lua_pushnumber(lState, ImGuiKey_RightArrow);
+  lua_setglobal(lState, "ImGuiKey_RightArrow");
+  lua_pushnumber(lState, ImGuiKey_UpArrow);
+  lua_setglobal(lState, "ImGuiKey_UpArrow");
+  lua_pushnumber(lState, ImGuiKey_DownArrow);
+  lua_setglobal(lState, "ImGuiKey_DownArrow");
+  lua_pushnumber(lState, ImGuiKey_PageUp);
+  lua_setglobal(lState, "ImGuiKey_PageUp");
+  lua_pushnumber(lState, ImGuiKey_PageDown);
+  lua_setglobal(lState, "ImGuiKey_PageDown");
+  lua_pushnumber(lState, ImGuiKey_Home);
+  lua_setglobal(lState, "ImGuiKey_Home");
 
 }
