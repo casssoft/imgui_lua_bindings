@@ -86,6 +86,11 @@ static int impl_##name(lua_State *L) { \
   int arg = 1; \
   int stackval = 0;
 
+// I use OpenGL so this is a GLuint
+// Using unsigned int cause im lazy don't copy me
+#define IM_TEXTURE_ID_ARG(name) \
+  const ImTextureID name = (ImTextureID)luaL_checkinteger(L, arg++);
+
 #define OPTIONAL_LABEL_ARG(name) \
   const char* name; \
   if (arg <= max_args) { \
@@ -111,6 +116,26 @@ static int impl_##name(lua_State *L) { \
     i_##name##_y = luaL_checknumber(L, arg++); \
   } \
   const ImVec2 name((double)i_##name##_x, (double)i_##name##_y);
+
+#define IM_VEC_4_ARG(name) \
+  const lua_Number i_##name##_x = luaL_checknumber(L, arg++); \
+  const lua_Number i_##name##_y = luaL_checknumber(L, arg++); \
+  const lua_Number i_##name##_z = luaL_checknumber(L, arg++); \
+  const lua_Number i_##name##_w = luaL_checknumber(L, arg++); \
+  const ImVec4 name((double)i_##name##_x, (double)i_##name##_y, (double)i_##name##_z, (double)i_##name##_w);
+
+#define OPTIONAL_IM_VEC_4_ARG(name, x, y, z, w) \
+  lua_Number i_##name##_x = x; \
+  lua_Number i_##name##_y = y; \
+  lua_Number i_##name##_z = z; \
+  lua_Number i_##name##_w = w; \
+  if (arg <= max_args - 1) { \
+    i_##name##_x = luaL_checknumber(L, arg++); \
+    i_##name##_y = luaL_checknumber(L, arg++); \
+    i_##name##_z = luaL_checknumber(L, arg++); \
+    i_##name##_w = luaL_checknumber(L, arg++); \
+  } \
+  const ImVec4 name((double)i_##name##_x, (double)i_##name##_y, (double)i_##name##_z, (double)i_##name##_w);
 
 #define NUMBER_ARG(name)\
   lua_Number name = luaL_checknumber(L, arg++);
@@ -255,6 +280,8 @@ static const struct luaL_Reg imguilib [] = {
 #define IMGUI_FUNCTION(name) {#name, impl_##name},
 // These defines are just redefining everything to nothing so
 // we can get the function names
+#undef IM_TEXTURE_ID_ARG
+#define IM_TEXTURE_ID_ARG(name)
 #undef OPTIONAL_LABEL_ARG
 #define OPTIONAL_LABEL_ARG(name)
 #undef LABEL_ARG
@@ -263,6 +290,10 @@ static const struct luaL_Reg imguilib [] = {
 #define IM_VEC_2_ARG(name)
 #undef OPTIONAL_IM_VEC_2_ARG
 #define OPTIONAL_IM_VEC_2_ARG(name, x, y)
+#undef IM_VEC_4_ARG
+#define IM_VEC_4_ARG(name)
+#undef OPTIONAL_IM_VEC_4_ARG
+#define OPTIONAL_IM_VEC_4_ARG(name, x, y, z, w)
 #undef NUMBER_ARG
 #define NUMBER_ARG(name)
 #undef OPTIONAL_NUMBER_ARG

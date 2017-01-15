@@ -48,8 +48,10 @@ my %funcNames;
 my %endTypeToInt;
 my @endTypes;
 while ($line = <STDIN>) {
-  #replace ImVec2(x, y) with ImVec2 x, y so it's easier for regex
+  #replace ImVec2(x, y) with ImVec2 x, y so it's easier for regex (and ImVec4)
   $line =~ s/ImVec2\(([^,]*),([^\)]*)\)/ImVec2 $1 $2/g;
+  $line =~ s/ImVec4\(([^,]*),([^\)]*),([^\)]*),([^\)]*)\)/ImVec4 $1 $2 $3 $4/g;
+
   #delete this so it's eaiser for regexes
   $line =~ s/ IM_PRINTFARGS\(.\);/;/g;
   if ($line =~ m/ *IMGUI_API *([^ ]+) *([^\(]+)\(([^\;]*)\);/) {
@@ -134,13 +136,22 @@ while ($line = <STDIN>) {
           push(@before, "LABEL_ARG($name)");
         }
         push(@funcArgs, $name);
-      #const ImVec2& size with or without default value of ImVec(0,0)
-      } elsif ($args[$i] =~ m/^ *const ImVec2& ([^ ]*) *(= * ImVec2 0 0|) *$/) {
-        my $name = $1;
-        if ($2 =~ m/^= * ImVec2 0 0$/) {
-          push(@before, "OPTIONAL_IM_VEC_2_ARG($name, 0, 0)");
+      #const ImVec2& with default or not
+      } elsif ($args[$i] =~ m/^ *const ImVec2& ([^ ]*) *(= * ImVec2 [^ ]* [^ ]*|) *$/) {
+         my $name = $1;
+        if ($2 =~ m/^= * ImVec2 ([^ ]*) ([^ ]*)$/) {
+          push(@before, "OPTIONAL_IM_VEC_2_ARG($name, $1, $2)");
         } else {
           push(@before, "IM_VEC_2_ARG($name)");
+        }
+        push(@funcArgs, $name);
+      #const ImVec4& with default or not
+      } elsif ($args[$i] =~ m/^ *const ImVec4& ([^ ]*) *(= * ImVec4 [^ ]* [^ ]* [^ ]* [^ ]*|) *$/) {
+        my $name = $1;
+        if ($2 =~ m/^= * ImVec4 ([^ ]*) ([^ ]*) ([^ ]*) ([^ ]*)$/) {
+          push(@before, "OPTIONAL_IM_VEC_4_ARG($name, $1, $2, $3, $4)");
+        } else {
+          push(@before, "IM_VEC_4_ARG($name)");
         }
         push(@funcArgs, $name);
         # one of the various enums
@@ -171,6 +182,11 @@ while ($line = <STDIN>) {
         } else {
           push(@before, "UINT_ARG($name)");
         }
+        push(@funcArgs, $name);
+      #ImTextureID 
+      } elsif ($args[$i] =~ m/^ *ImTextureID ([^ =\[]*) *$/) {
+        my $name = $1;
+        push(@before, "IM_TEXTURE_ID_ARG($name)");
         push(@funcArgs, $name);
         # bool with default value or not
       } elsif ($args[$i] =~ m/^ *bool ([^ =\[]*)( *= *true| *= *false|) *$/) {

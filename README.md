@@ -4,7 +4,7 @@ ImGui https://github.com/ocornut/imgui
 
 It supports a lot of common imgui operations except for initializing imgui.
 
-Supported functions: 203 Unsupported functions 75 for 1.47 (WIP)
+Supported functions: 222 Unsupported functions: 77 for 1.50 (WIP)
 
 ##How to call these imgui bindings from lua##
 
@@ -53,9 +53,7 @@ of p_opened to whether the window is open or not. Still use the first return val
 
 ##ImVecs:##
 
-Currently only ImVec2s are supported (it's not too hard to fix, take a look at the .pl file).
-
-Those are arguments are expanded to two variables instead of one object.
+Those are arguments are expanded to separate variables instead of one object.
 
 Function definition in C++
 ```c+++
@@ -70,14 +68,14 @@ imgui.SetNextWindowPos(100, 50)
 
 ##How to build:##
 
-Generate iterator file (or use the one for 1.47 WIP already in the repo)
+Generate iterator file (or use the one for 1.50 WIP already in the repo)
 ```
 ./generate_imgui_bindings.pl <../imgui/imgui.h >imgui_iterator.cpp
 ```
 
 This creates a file with info about imgui functions from the imgui.h file.
 
-Then copy the macro definitions in imgui_lua_bindings.cpp and include imgui_iterator.cpp in that the cpp file. This will generate static int impl_FunctionName(lua_State*L) {} functions for each imgui function. Bind these to lua functions and your good to go. (Check out imgui_lua_bindings.cpp for a full example)
+Then copy the macro definitions in imgui_lua_bindings.cpp and include imgui_iterator.cpp in that the cpp file. This will generate static int impl_FunctionName(lua_State*L) {} functions for each imgui function. Bind these to lua functions and you're good to go. (Check out imgui_lua_bindings.cpp for a full example)
 
 The imgui_lua_bindings.cpp has two functions RunString and LoadImguiBindings
 
