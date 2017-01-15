@@ -2,7 +2,11 @@
 
 ImGui https://github.com/ocornut/imgui
 
-It supports a lot of common imgui operations except for initializing imgui.
+These bindings support a lot of common imgui operations except for initializing imgui. 
+
+This repo only deals with binding ImGui with lua and doesn't deal with setting up the ImGui impl files required to run ImGui, check out the ImGui repo for help with that. 
+
+For LOVE bindings check out https://github.com/slages/love-imgui (uses these C++ bindings and does the rest of the work for you).
 
 Supported functions: 222 Unsupported functions: 77 for 1.50 (WIP)
 
@@ -94,6 +98,9 @@ I don't feel like writing a license so here's it in laymans terms...
 
 You can use this code for whatever just don't redistribute the exact same source code and try to sell it, or claim that the source code was made by you.
 You can compile this source code and sell it. You can change this source code and sell the modified version.
-You can include this source code in whatever open source project. You can include it in whatever closed source project.
+You can include this source code in whatever open source project (let me know please!). You can include it in whatever closed source project.
 
 Just be chill and if you make a billion dollars send me an email or something.
+
+##Contributing##
+If you have any improvements create a pull request! If you want a function supported or disagree with how the bindings work make an issue!
