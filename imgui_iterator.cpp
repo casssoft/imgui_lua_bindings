@@ -1,3 +1,9 @@
+//struct ImVec2
+
+//struct ImVec4
+
+//namespace ImGui
+
 //    IMGUI_API ImGuiIO&      GetIO();
 // Unsupported return type ImGuiIO&
 //    IMGUI_API ImGuiStyle&   GetStyle();
@@ -1586,3 +1592,61 @@ END_STACK_OPTION(7, EndMenu)
 END_STACK_OPTION(8, EndPopup)
 END_STACK_OPTION(9, EndChildFrame)
 END_STACK_END
+//enum ImGuiWindowFlags_
+
+//enum ImGuiInputTextFlags_
+
+//enum ImGuiTreeNodeFlags_
+
+//enum ImGuiSelectableFlags_
+
+//enum ImGuiKey_
+
+//enum ImGuiCol_
+
+//enum ImGuiStyleVar_
+
+//enum ImGuiColorEditMode_
+
+//enum ImGuiMouseCursor_
+
+//enum ImGuiSetCond_
+
+//struct ImGuiStyle
+
+//struct ImGuiIO
+
+//class ImVector
+
+//struct ImGuiOnceUponAFrame
+
+//struct ImGuiTextFilter
+
+//struct ImGuiTextBuffer
+
+//struct ImGuiStorage
+
+//struct ImGuiTextEditCallbackData
+
+//struct ImGuiSizeConstraintCallbackData
+
+//struct ImColor
+
+//struct ImGuiListClipper
+
+//struct ImDrawCmd
+
+//struct ImDrawVert
+
+//struct ImDrawChannel
+
+//struct ImDrawList
+
+//struct ImDrawData
+
+//struct ImFontConfig
+
+//struct ImFontAtlas
+
+//struct ImFont
+

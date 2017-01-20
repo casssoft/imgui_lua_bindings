@@ -10,7 +10,7 @@ use diagnostics;
 # check imgui_iterator for explanations of why some functions are not supported yet
 
 #TODO switch to export style with modules or just copy paste
-require "supportscripts/parse_blocks.pl";
+require "./parse_blocks.pl";
 
 sub generateNamespaceImgui {
   my ($imguiBlock) = @_;
