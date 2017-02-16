@@ -11,17 +11,11 @@
 //    IMGUI_API ImDrawData*   GetDrawData();                              // same value as passed to your io.RenderDrawListsFn() function. valid after Render() and until the next call to NewFrame()
 // Unsupported return type ImDrawData*
 //    IMGUI_API void          NewFrame();                                 // start a new ImGui frame, you can submit any command from this point until NewFrame()/Render().
-IMGUI_FUNCTION(NewFrame)
-CALL_FUNCTION_NO_RET(NewFrame)
-END_IMGUI_FUNC
+//Not allowed to use this function
 //    IMGUI_API void          Render();                                   // ends the ImGui frame, finalize rendering data, then call your io.RenderDrawListsFn() function if set.
-IMGUI_FUNCTION(Render)
-CALL_FUNCTION_NO_RET(Render)
-END_IMGUI_FUNC
+//Not allowed to use this function
 //    IMGUI_API void          Shutdown();
-IMGUI_FUNCTION(Shutdown)
-CALL_FUNCTION_NO_RET(Shutdown)
-END_IMGUI_FUNC
+//Not allowed to use this function
 //    IMGUI_API void          ShowUserGuide();                            // help block
 IMGUI_FUNCTION(ShowUserGuide)
 CALL_FUNCTION_NO_RET(ShowUserGuide)
@@ -1642,6 +1636,282 @@ END_STACK_END
 
 //struct ImDrawList
 
+//    IMGUI_API void  PushClipRect(ImVec2 clip_rect_min, ImVec2 clip_rect_max, bool intersect_with_current_clip_rect = false);  // Render-level scissoring. This is passed down to your render function but not used for CPU-side coarse clipping. Prefer using higher-level ImGui::PushClipRect() to affect logic (hit-testing and widget culling)
+IMGUI_FUNCTION_DRAW_LIST(PushClipRect)
+IM_VEC_2_ARG(clip_rect_min)
+IM_VEC_2_ARG(clip_rect_max)
+OPTIONAL_BOOL_ARG(intersect_with_current_clip_rect, false)
+DRAW_LIST_CALL_FUNCTION_NO_RET(PushClipRect, clip_rect_min, clip_rect_max, intersect_with_current_clip_rect)
+END_IMGUI_FUNC
+//    IMGUI_API void  PushClipRectFullScreen();
+IMGUI_FUNCTION_DRAW_LIST(PushClipRectFullScreen)
+DRAW_LIST_CALL_FUNCTION_NO_RET(PushClipRectFullScreen)
+END_IMGUI_FUNC
+//    IMGUI_API void  PopClipRect();
+IMGUI_FUNCTION_DRAW_LIST(PopClipRect)
+DRAW_LIST_CALL_FUNCTION_NO_RET(PopClipRect)
+END_IMGUI_FUNC
+//    IMGUI_API void  PushTextureID(const ImTextureID& texture_id);
+// Unsupported arg type const ImTextureID& texture_id
+//    IMGUI_API void  PopTextureID();
+IMGUI_FUNCTION_DRAW_LIST(PopTextureID)
+DRAW_LIST_CALL_FUNCTION_NO_RET(PopTextureID)
+END_IMGUI_FUNC
+//    IMGUI_API void  AddLine(const ImVec2& a, const ImVec2& b, ImU32 col, float thickness = 1.0f);
+IMGUI_FUNCTION_DRAW_LIST(AddLine)
+IM_VEC_2_ARG(a)
+IM_VEC_2_ARG(b)
+UINT_ARG(col)
+OPTIONAL_NUMBER_ARG(thickness, 1.0f)
+DRAW_LIST_CALL_FUNCTION_NO_RET(AddLine, a, b, col, thickness)
+END_IMGUI_FUNC
+//    IMGUI_API void  AddRect(const ImVec2& a, const ImVec2& b, ImU32 col, float rounding = 0.0f, int rounding_corners_flags = ~0, float thickness = 1.0f);   // a: upper-left, b: lower-right, rounding_corners_flags: 4-bits corresponding to which corner to round
+IMGUI_FUNCTION_DRAW_LIST(AddRect)
+IM_VEC_2_ARG(a)
+IM_VEC_2_ARG(b)
+UINT_ARG(col)
+OPTIONAL_NUMBER_ARG(rounding, 0.0f)
+OPTIONAL_INT_ARG(rounding_corners_flags, ~0)
+OPTIONAL_NUMBER_ARG(thickness, 1.0f)
+DRAW_LIST_CALL_FUNCTION_NO_RET(AddRect, a, b, col, rounding, rounding_corners_flags, thickness)
+END_IMGUI_FUNC
+//    IMGUI_API void  AddRectFilled(const ImVec2& a, const ImVec2& b, ImU32 col, float rounding = 0.0f, int rounding_corners_flags = ~0);                     // a: upper-left, b: lower-right
+IMGUI_FUNCTION_DRAW_LIST(AddRectFilled)
+IM_VEC_2_ARG(a)
+IM_VEC_2_ARG(b)
+UINT_ARG(col)
+OPTIONAL_NUMBER_ARG(rounding, 0.0f)
+OPTIONAL_INT_ARG(rounding_corners_flags, ~0)
+DRAW_LIST_CALL_FUNCTION_NO_RET(AddRectFilled, a, b, col, rounding, rounding_corners_flags)
+END_IMGUI_FUNC
+//    IMGUI_API void  AddRectFilledMultiColor(const ImVec2& a, const ImVec2& b, ImU32 col_upr_left, ImU32 col_upr_right, ImU32 col_bot_right, ImU32 col_bot_left);
+IMGUI_FUNCTION_DRAW_LIST(AddRectFilledMultiColor)
+IM_VEC_2_ARG(a)
+IM_VEC_2_ARG(b)
+UINT_ARG(col_upr_left)
+UINT_ARG(col_upr_right)
+UINT_ARG(col_bot_right)
+UINT_ARG(col_bot_left)
+DRAW_LIST_CALL_FUNCTION_NO_RET(AddRectFilledMultiColor, a, b, col_upr_left, col_upr_right, col_bot_right, col_bot_left)
+END_IMGUI_FUNC
+//    IMGUI_API void  AddQuad(const ImVec2& a, const ImVec2& b, const ImVec2& c, const ImVec2& d, ImU32 col, float thickness = 1.0f);
+IMGUI_FUNCTION_DRAW_LIST(AddQuad)
+IM_VEC_2_ARG(a)
+IM_VEC_2_ARG(b)
+IM_VEC_2_ARG(c)
+IM_VEC_2_ARG(d)
+UINT_ARG(col)
+OPTIONAL_NUMBER_ARG(thickness, 1.0f)
+DRAW_LIST_CALL_FUNCTION_NO_RET(AddQuad, a, b, c, d, col, thickness)
+END_IMGUI_FUNC
+//    IMGUI_API void  AddQuadFilled(const ImVec2& a, const ImVec2& b, const ImVec2& c, const ImVec2& d, ImU32 col);
+IMGUI_FUNCTION_DRAW_LIST(AddQuadFilled)
+IM_VEC_2_ARG(a)
+IM_VEC_2_ARG(b)
+IM_VEC_2_ARG(c)
+IM_VEC_2_ARG(d)
+UINT_ARG(col)
+DRAW_LIST_CALL_FUNCTION_NO_RET(AddQuadFilled, a, b, c, d, col)
+END_IMGUI_FUNC
+//    IMGUI_API void  AddTriangle(const ImVec2& a, const ImVec2& b, const ImVec2& c, ImU32 col, float thickness = 1.0f);
+IMGUI_FUNCTION_DRAW_LIST(AddTriangle)
+IM_VEC_2_ARG(a)
+IM_VEC_2_ARG(b)
+IM_VEC_2_ARG(c)
+UINT_ARG(col)
+OPTIONAL_NUMBER_ARG(thickness, 1.0f)
+DRAW_LIST_CALL_FUNCTION_NO_RET(AddTriangle, a, b, c, col, thickness)
+END_IMGUI_FUNC
+//    IMGUI_API void  AddTriangleFilled(const ImVec2& a, const ImVec2& b, const ImVec2& c, ImU32 col);
+IMGUI_FUNCTION_DRAW_LIST(AddTriangleFilled)
+IM_VEC_2_ARG(a)
+IM_VEC_2_ARG(b)
+IM_VEC_2_ARG(c)
+UINT_ARG(col)
+DRAW_LIST_CALL_FUNCTION_NO_RET(AddTriangleFilled, a, b, c, col)
+END_IMGUI_FUNC
+//    IMGUI_API void  AddCircle(const ImVec2& centre, float radius, ImU32 col, int num_segments = 12, float thickness = 1.0f);
+IMGUI_FUNCTION_DRAW_LIST(AddCircle)
+IM_VEC_2_ARG(centre)
+NUMBER_ARG(radius)
+UINT_ARG(col)
+OPTIONAL_INT_ARG(num_segments, 12)
+OPTIONAL_NUMBER_ARG(thickness, 1.0f)
+DRAW_LIST_CALL_FUNCTION_NO_RET(AddCircle, centre, radius, col, num_segments, thickness)
+END_IMGUI_FUNC
+//    IMGUI_API void  AddCircleFilled(const ImVec2& centre, float radius, ImU32 col, int num_segments = 12);
+IMGUI_FUNCTION_DRAW_LIST(AddCircleFilled)
+IM_VEC_2_ARG(centre)
+NUMBER_ARG(radius)
+UINT_ARG(col)
+OPTIONAL_INT_ARG(num_segments, 12)
+DRAW_LIST_CALL_FUNCTION_NO_RET(AddCircleFilled, centre, radius, col, num_segments)
+END_IMGUI_FUNC
+//    IMGUI_API void  AddText(const ImVec2& pos, ImU32 col, const char* text_begin, const char* text_end = NULL);
+IMGUI_FUNCTION_DRAW_LIST(AddText)
+IM_VEC_2_ARG(pos)
+UINT_ARG(col)
+LABEL_ARG(text_begin)
+OPTIONAL_LABEL_ARG(text_end)
+DRAW_LIST_CALL_FUNCTION_NO_RET(AddText, pos, col, text_begin, text_end)
+END_IMGUI_FUNC
+//    IMGUI_API void  AddText(const ImFont* font, float font_size, const ImVec2& pos, ImU32 col, const char* text_begin, const char* text_end = NULL, float wrap_width = 0.0f, const ImVec4* cpu_fine_clip_rect = NULL);
+// Unsupported arg type const ImFont* font
+// Unsupported arg type  const ImVec4* cpu_fine_clip_rect = NULL
+//    IMGUI_API void  AddImage(ImTextureID user_texture_id, const ImVec2& a, const ImVec2& b, const ImVec2& uv0 = ImVec2 0 0, const ImVec2& uv1 = ImVec2 1 1, ImU32 col = 0xFFFFFFFF);
+IMGUI_FUNCTION_DRAW_LIST(AddImage)
+IM_TEXTURE_ID_ARG(user_texture_id)
+IM_VEC_2_ARG(a)
+IM_VEC_2_ARG(b)
+OPTIONAL_IM_VEC_2_ARG(uv0, 0, 0)
+OPTIONAL_IM_VEC_2_ARG(uv1, 1, 1)
+UINT_ARG(col)
+DRAW_LIST_CALL_FUNCTION_NO_RET(AddImage, user_texture_id, a, b, uv0, uv1, col)
+END_IMGUI_FUNC
+//    IMGUI_API void  AddPolyline(const ImVec2* points, const int num_points, ImU32 col, bool closed, float thickness, bool anti_aliased);
+// Unsupported arg type const ImVec2* points
+// Unsupported arg type  const int num_points
+//    IMGUI_API void  AddConvexPolyFilled(const ImVec2* points, const int num_points, ImU32 col, bool anti_aliased);
+// Unsupported arg type const ImVec2* points
+// Unsupported arg type  const int num_points
+//    IMGUI_API void  AddBezierCurve(const ImVec2& pos0, const ImVec2& cp0, const ImVec2& cp1, const ImVec2& pos1, ImU32 col, float thickness, int num_segments = 0);
+IMGUI_FUNCTION_DRAW_LIST(AddBezierCurve)
+IM_VEC_2_ARG(pos0)
+IM_VEC_2_ARG(cp0)
+IM_VEC_2_ARG(cp1)
+IM_VEC_2_ARG(pos1)
+UINT_ARG(col)
+NUMBER_ARG(thickness)
+OPTIONAL_INT_ARG(num_segments, 0)
+DRAW_LIST_CALL_FUNCTION_NO_RET(AddBezierCurve, pos0, cp0, cp1, pos1, col, thickness, num_segments)
+END_IMGUI_FUNC
+//    inline    void  PathClear()                                                 { _Path.resize(0); }
+// Unsupported arg type )                                                 { _Path.resize(0
+//    inline    void  PathLineTo(const ImVec2& pos)                               { _Path.push_back(pos); }
+// Unsupported arg type const ImVec2& pos)                               { _Path.push_back(pos
+//    inline    void  PathLineToMergeDuplicate(const ImVec2& pos)                 { if (_Path.Size == 0 || memcmp(&_Path[_Path.Size-1], &pos, 8) != 0) _Path.push_back(pos); }
+// Unsupported arg type const ImVec2& pos)                 { if (_Path.Size == 0 || memcmp(&_Path[_Path.Size-1]
+// Unsupported arg type  &pos
+// Unsupported arg type  8) != 0) _Path.push_back(pos
+//    inline    void  PathFill(ImU32 col)                                         { AddConvexPolyFilled(_Path.Data, _Path.Size, col, true); PathClear(); }
+// Unsupported arg type ImU32 col)                                         { AddConvexPolyFilled(_Path.Data
+// Unsupported arg type  _Path.Size
+// Unsupported arg type  col
+// Unsupported arg type  true
+//    inline    void  PathStroke(ImU32 col, bool closed, float thickness = 1.0f)  { AddPolyline(_Path.Data, _Path.Size, col, closed, thickness, true); PathClear(); }
+// Unsupported arg type  float thickness = 1.0f)  { AddPolyline(_Path.Data
+// Unsupported arg type  _Path.Size
+// Unsupported arg type  col
+// Unsupported arg type  closed
+// Unsupported arg type  thickness
+// Unsupported arg type  true
+//    IMGUI_API void  PathArcTo(const ImVec2& centre, float radius, float a_min, float a_max, int num_segments = 10);
+IMGUI_FUNCTION_DRAW_LIST(PathArcTo)
+IM_VEC_2_ARG(centre)
+NUMBER_ARG(radius)
+NUMBER_ARG(a_min)
+NUMBER_ARG(a_max)
+OPTIONAL_INT_ARG(num_segments, 10)
+DRAW_LIST_CALL_FUNCTION_NO_RET(PathArcTo, centre, radius, a_min, a_max, num_segments)
+END_IMGUI_FUNC
+//    IMGUI_API void  PathArcToFast(const ImVec2& centre, float radius, int a_min_of_12, int a_max_of_12);                                // Use precomputed angles for a 12 steps circle
+IMGUI_FUNCTION_DRAW_LIST(PathArcToFast)
+IM_VEC_2_ARG(centre)
+NUMBER_ARG(radius)
+INT_ARG(a_min_of_12)
+INT_ARG(a_max_of_12)
+DRAW_LIST_CALL_FUNCTION_NO_RET(PathArcToFast, centre, radius, a_min_of_12, a_max_of_12)
+END_IMGUI_FUNC
+//    IMGUI_API void  PathBezierCurveTo(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, int num_segments = 0);
+IMGUI_FUNCTION_DRAW_LIST(PathBezierCurveTo)
+IM_VEC_2_ARG(p1)
+IM_VEC_2_ARG(p2)
+IM_VEC_2_ARG(p3)
+OPTIONAL_INT_ARG(num_segments, 0)
+DRAW_LIST_CALL_FUNCTION_NO_RET(PathBezierCurveTo, p1, p2, p3, num_segments)
+END_IMGUI_FUNC
+//    IMGUI_API void  PathRect(const ImVec2& rect_min, const ImVec2& rect_max, float rounding = 0.0f, int rounding_corners_flags = ~0);   // rounding_corners_flags: 4-bits corresponding to which corner to round
+IMGUI_FUNCTION_DRAW_LIST(PathRect)
+IM_VEC_2_ARG(rect_min)
+IM_VEC_2_ARG(rect_max)
+OPTIONAL_NUMBER_ARG(rounding, 0.0f)
+OPTIONAL_INT_ARG(rounding_corners_flags, ~0)
+DRAW_LIST_CALL_FUNCTION_NO_RET(PathRect, rect_min, rect_max, rounding, rounding_corners_flags)
+END_IMGUI_FUNC
+//    IMGUI_API void  ChannelsSplit(int channels_count);
+IMGUI_FUNCTION_DRAW_LIST(ChannelsSplit)
+INT_ARG(channels_count)
+DRAW_LIST_CALL_FUNCTION_NO_RET(ChannelsSplit, channels_count)
+END_IMGUI_FUNC
+//    IMGUI_API void  ChannelsMerge();
+IMGUI_FUNCTION_DRAW_LIST(ChannelsMerge)
+DRAW_LIST_CALL_FUNCTION_NO_RET(ChannelsMerge)
+END_IMGUI_FUNC
+//    IMGUI_API void  ChannelsSetCurrent(int channel_index);
+IMGUI_FUNCTION_DRAW_LIST(ChannelsSetCurrent)
+INT_ARG(channel_index)
+DRAW_LIST_CALL_FUNCTION_NO_RET(ChannelsSetCurrent, channel_index)
+END_IMGUI_FUNC
+//    IMGUI_API void  AddCallback(ImDrawCallback callback, void* callback_data);  // Your rendering function must check for 'UserCallback' in ImDrawCmd and call the function instead of rendering triangles.
+// Unsupported arg type ImDrawCallback callback
+// Unsupported arg type  void* callback_data
+//    IMGUI_API void  AddDrawCmd();                                               // This is useful if you need to forcefully create a new draw call (to allow for dependent rendering / blending). Otherwise primitives are merged into the same draw-call as much as possible
+IMGUI_FUNCTION_DRAW_LIST(AddDrawCmd)
+DRAW_LIST_CALL_FUNCTION_NO_RET(AddDrawCmd)
+END_IMGUI_FUNC
+//    IMGUI_API void  Clear();
+IMGUI_FUNCTION_DRAW_LIST(Clear)
+DRAW_LIST_CALL_FUNCTION_NO_RET(Clear)
+END_IMGUI_FUNC
+//    IMGUI_API void  ClearFreeMemory();
+IMGUI_FUNCTION_DRAW_LIST(ClearFreeMemory)
+DRAW_LIST_CALL_FUNCTION_NO_RET(ClearFreeMemory)
+END_IMGUI_FUNC
+//    IMGUI_API void  PrimReserve(int idx_count, int vtx_count);
+IMGUI_FUNCTION_DRAW_LIST(PrimReserve)
+INT_ARG(idx_count)
+INT_ARG(vtx_count)
+DRAW_LIST_CALL_FUNCTION_NO_RET(PrimReserve, idx_count, vtx_count)
+END_IMGUI_FUNC
+//    IMGUI_API void  PrimRect(const ImVec2& a, const ImVec2& b, ImU32 col);      // Axis aligned rectangle (composed of two triangles)
+IMGUI_FUNCTION_DRAW_LIST(PrimRect)
+IM_VEC_2_ARG(a)
+IM_VEC_2_ARG(b)
+UINT_ARG(col)
+DRAW_LIST_CALL_FUNCTION_NO_RET(PrimRect, a, b, col)
+END_IMGUI_FUNC
+//    IMGUI_API void  PrimRectUV(const ImVec2& a, const ImVec2& b, const ImVec2& uv_a, const ImVec2& uv_b, ImU32 col);
+IMGUI_FUNCTION_DRAW_LIST(PrimRectUV)
+IM_VEC_2_ARG(a)
+IM_VEC_2_ARG(b)
+IM_VEC_2_ARG(uv_a)
+IM_VEC_2_ARG(uv_b)
+UINT_ARG(col)
+DRAW_LIST_CALL_FUNCTION_NO_RET(PrimRectUV, a, b, uv_a, uv_b, col)
+END_IMGUI_FUNC
+//    IMGUI_API void  PrimQuadUV(const ImVec2& a, const ImVec2& b, const ImVec2& c, const ImVec2& d, const ImVec2& uv_a, const ImVec2& uv_b, const ImVec2& uv_c, const ImVec2& uv_d, ImU32 col);
+IMGUI_FUNCTION_DRAW_LIST(PrimQuadUV)
+IM_VEC_2_ARG(a)
+IM_VEC_2_ARG(b)
+IM_VEC_2_ARG(c)
+IM_VEC_2_ARG(d)
+IM_VEC_2_ARG(uv_a)
+IM_VEC_2_ARG(uv_b)
+IM_VEC_2_ARG(uv_c)
+IM_VEC_2_ARG(uv_d)
+UINT_ARG(col)
+DRAW_LIST_CALL_FUNCTION_NO_RET(PrimQuadUV, a, b, c, d, uv_a, uv_b, uv_c, uv_d, col)
+END_IMGUI_FUNC
+//    inline    void  PrimVtx(const ImVec2& pos, const ImVec2& uv, ImU32 col)     { PrimWriteIdx((ImDrawIdx)_VtxCurrentIdx); PrimWriteVtx(pos, uv, col); }
+// Unsupported arg type  ImU32 col)     { PrimWriteIdx((ImDrawIdx)_VtxCurrentIdx
+//    IMGUI_API void  UpdateClipRect();
+IMGUI_FUNCTION_DRAW_LIST(UpdateClipRect)
+DRAW_LIST_CALL_FUNCTION_NO_RET(UpdateClipRect)
+END_IMGUI_FUNC
+//    IMGUI_API void  UpdateTextureID();
+IMGUI_FUNCTION_DRAW_LIST(UpdateTextureID)
+DRAW_LIST_CALL_FUNCTION_NO_RET(UpdateTextureID)
+END_IMGUI_FUNC
 //struct ImDrawData
 
 //struct ImFontConfig

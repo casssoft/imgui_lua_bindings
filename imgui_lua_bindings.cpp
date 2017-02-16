@@ -79,6 +79,11 @@ const char * RunString(const char* szLua) {
 }
 
 
+#define IMGUI_FUNCTION_DRAW_LIST(name) \
+static int impl_draw_list_##name(lua_State *L) { \
+  int max_args = lua_gettop(L); \
+  int arg = 1; \
+  int stackval = 0;
 
 #define IMGUI_FUNCTION(name) \
 static int impl_##name(lua_State *L) { \
@@ -218,8 +223,14 @@ static int impl_##name(lua_State *L) { \
 #define CALL_FUNCTION(name, retType,...) \
   retType ret = ImGui::name(__VA_ARGS__);
 
+#define DRAW_LIST_CALL_FUNCTION(name, retType,...) \
+  retType ret = ImGui::GetWindowDrawList()->name(__VA_ARGS__);
+
 #define CALL_FUNCTION_NO_RET(name, ...) \
   ImGui::name(__VA_ARGS__);
+
+#define DRAW_LIST_CALL_FUNCTION_NO_RET(name, ...) \
+  ImGui::GetWindowDrawList()->name(__VA_ARGS__);
 
 #define PUSH_NUMBER(name) \
   lua_pushnumber(L, name); \
@@ -278,6 +289,8 @@ static void ImEndStack(int type) { \
 static const struct luaL_Reg imguilib [] = {
 #undef IMGUI_FUNCTION
 #define IMGUI_FUNCTION(name) {#name, impl_##name},
+#undef IMGUI_FUNCTION_DRAW_LIST
+#define IMGUI_FUNCTION_DRAW_LIST(name) {"DrawList_" #name, impl_draw_list_##name},
 // These defines are just redefining everything to nothing so
 // we can get the function names
 #undef IM_TEXTURE_ID_ARG
@@ -328,8 +341,12 @@ static const struct luaL_Reg imguilib [] = {
 #define BOOL_ARG(name)
 #undef CALL_FUNCTION
 #define CALL_FUNCTION(name, retType, ...)
+#undef DRAW_LIST_CALL_FUNCTION
+#define DRAW_LIST_CALL_FUNCTION(name, retType, ...)
 #undef CALL_FUNCTION_NO_RET
 #define CALL_FUNCTION_NO_RET(name, ...)
+#undef DRAW_LIST_CALL_FUNCTION_NO_RET
+#define DRAW_LIST_CALL_FUNCTION_NO_RET(name, ...)
 #undef PUSH_NUMBER
 #define PUSH_NUMBER(name)
 #undef PUSH_BOOL
