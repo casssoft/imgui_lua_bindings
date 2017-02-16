@@ -344,13 +344,13 @@ IMGUI_FUNCTION(GetColorU32)
 INT_ARG(idx)
 OPTIONAL_NUMBER_ARG(alpha_mul, 1.0f)
 CALL_FUNCTION(GetColorU32, unsigned int, idx, alpha_mul)
-PUSH_BOOL(ret)
+PUSH_NUMBER(ret)
 END_IMGUI_FUNC
 //    IMGUI_API ImU32         GetColorU32(const ImVec4& col);                                     // retrieve given color with style alpha applied
 IMGUI_FUNCTION(GetColorU32_1)
 IM_VEC_4_ARG(col)
 CALL_FUNCTION(GetColorU32, unsigned int, col)
-PUSH_BOOL(ret)
+PUSH_NUMBER(ret)
 END_IMGUI_FUNC
 //    IMGUI_API void          PushItemWidth(float item_width);                                    // width of items for the common item+label case, pixels. 0.0f = default to ~2/3 of windows width, >0.0f: width in pixels, <0.0f align xx pixels to the right of window (so -1.0f always align width to the right side)
 IMGUI_FUNCTION(PushItemWidth)
@@ -562,14 +562,14 @@ END_IMGUI_FUNC
 IMGUI_FUNCTION(GetID)
 LABEL_ARG(str_id)
 CALL_FUNCTION(GetID, unsigned int, str_id)
-PUSH_BOOL(ret)
+PUSH_NUMBER(ret)
 END_IMGUI_FUNC
 //    IMGUI_API ImGuiID       GetID(const char* str_id_begin, const char* str_id_end);
 IMGUI_FUNCTION(GetID_2)
 LABEL_ARG(str_id_begin)
 LABEL_ARG(str_id_end)
 CALL_FUNCTION(GetID, unsigned int, str_id_begin, str_id_end)
-PUSH_BOOL(ret)
+PUSH_NUMBER(ret)
 END_IMGUI_FUNC
 //    IMGUI_API ImGuiID       GetID(const void* ptr_id);
 // Unsupported arg type const void* ptr_id
@@ -1427,7 +1427,7 @@ END_IMGUI_FUNC
 IMGUI_FUNCTION(ColorConvertFloat4ToU32)
 IM_VEC_4_ARG(in)
 CALL_FUNCTION(ColorConvertFloat4ToU32, unsigned int, in)
-PUSH_BOOL(ret)
+PUSH_NUMBER(ret)
 END_IMGUI_FUNC
 //    IMGUI_API void          ColorConvertRGBtoHSV(float r, float g, float b, float& out_h, float& out_s, float& out_v);
 // Unsupported arg type  float& out_h
