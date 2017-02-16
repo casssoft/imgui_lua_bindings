@@ -69,6 +69,23 @@ How to call function in lua
 imgui.SetNextWindowPos(100, 50)
 ```
 
+##DrawList functions:##
+
+All functions that operate on drawlists are called with the prefix DrawList
+
+Function definition in C++
+```c++
+    IMGUI_API void  AddLine(const ImVec2& a, const ImVec2& b, ImU32 col, float thickness = 1.0f);
+```
+
+How to call function in lua
+```lua
+imgui.DrawList_AddLine(
+  imgui.DrawList_AddLine(minX, minY, maxX, maxY, 0xFF0000FF, 2)
+```
+Note you must specifiy the color in hex for now
+0x(ALPHA)(BLUE)(GREEN)(RED)
+0xFF0000FF = full opacity red
 
 ##How to build:##
 
