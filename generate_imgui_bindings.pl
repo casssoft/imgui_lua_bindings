@@ -31,13 +31,16 @@ sub generateNamespaceImgui {
 # We have to redefine stuff when it doesn't work so cleanly
   my %beginN = (
     "TreeNode" => "Tree",
-    "TreePush" => "Tree"
+    "TreePush" => "Tree",
+    "PushStyleVar" => "StyleVar"
     );
   my %changeN = (
-    "Tree" => "TreePop"
+    "Tree" => "TreePop",
+    "StyleVar"=> "PopStyleVar"
     );
   my %endN = (
-    "TreePop" => "Tree"
+    "TreePop" => "Tree",
+    "PopStyleVar" => "StyleVar"
     );
   my %endOverride = (
     "PopupModal" => "Popup",
