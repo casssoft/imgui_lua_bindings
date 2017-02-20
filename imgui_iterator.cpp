@@ -11,11 +11,17 @@
 //    IMGUI_API ImDrawData*   GetDrawData();                              // same value as passed to your io.RenderDrawListsFn() function. valid after Render() and until the next call to NewFrame()
 // Unsupported return type ImDrawData*
 //    IMGUI_API void          NewFrame();                                 // start a new ImGui frame, you can submit any command from this point until NewFrame()/Render().
-//Not allowed to use this function
+IMGUI_FUNCTION(NewFrame)
+CALL_FUNCTION_NO_RET(NewFrame)
+END_IMGUI_FUNC
 //    IMGUI_API void          Render();                                   // ends the ImGui frame, finalize rendering data, then call your io.RenderDrawListsFn() function if set.
-//Not allowed to use this function
+IMGUI_FUNCTION(Render)
+CALL_FUNCTION_NO_RET(Render)
+END_IMGUI_FUNC
 //    IMGUI_API void          Shutdown();
-//Not allowed to use this function
+IMGUI_FUNCTION(Shutdown)
+CALL_FUNCTION_NO_RET(Shutdown)
+END_IMGUI_FUNC
 //    IMGUI_API void          ShowUserGuide();                            // help block
 IMGUI_FUNCTION(ShowUserGuide)
 CALL_FUNCTION_NO_RET(ShowUserGuide)
@@ -314,17 +320,20 @@ IMGUI_FUNCTION(PushStyleVar)
 INT_ARG(idx)
 NUMBER_ARG(val)
 CALL_FUNCTION_NO_RET(PushStyleVar, idx, val)
+ADD_END_STACK(2)
 END_IMGUI_FUNC
 //    IMGUI_API void          PushStyleVar(ImGuiStyleVar idx, const ImVec2& val);
 IMGUI_FUNCTION(PushStyleVar_2)
 INT_ARG(idx)
 IM_VEC_2_ARG(val)
 CALL_FUNCTION_NO_RET(PushStyleVar, idx, val)
+ADD_END_STACK(2)
 END_IMGUI_FUNC
 //    IMGUI_API void          PopStyleVar(int count = 1);
 IMGUI_FUNCTION(PopStyleVar)
 OPTIONAL_INT_ARG(count, 1)
 CALL_FUNCTION_NO_RET(PopStyleVar, count)
+POP_END_STACK(2)
 END_IMGUI_FUNC
 //    IMGUI_API ImFont*       GetFont();                                                          // get current font
 // Unsupported return type ImFont*
@@ -429,12 +438,12 @@ END_IMGUI_FUNC
 //    IMGUI_API void          BeginGroup();                                                       // lock horizontal starting position + capture group bounding box into one "item" (so you can use IsItemHovered() or layout primitives such as SameLine() on whole group, etc.)
 IMGUI_FUNCTION(BeginGroup)
 CALL_FUNCTION_NO_RET(BeginGroup)
-ADD_END_STACK(2)
+ADD_END_STACK(3)
 END_IMGUI_FUNC
 //    IMGUI_API void          EndGroup();
 IMGUI_FUNCTION(EndGroup)
 CALL_FUNCTION_NO_RET(EndGroup)
-POP_END_STACK(2)
+POP_END_STACK(3)
 END_IMGUI_FUNC
 //    IMGUI_API ImVec2        GetCursorPos();                                                     // cursor position is relative to window position
 IMGUI_FUNCTION(GetCursorPos)
@@ -949,7 +958,7 @@ END_IMGUI_FUNC
 IMGUI_FUNCTION(TreeNode)
 LABEL_ARG(label)
 CALL_FUNCTION(TreeNode, bool, label)
-IF_RET_ADD_END_STACK(3)
+IF_RET_ADD_END_STACK(4)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API bool          TreeNode(const char* str_id, const char* fmt, ...);    // read the FAQ about why and how to use ID. to align arbitrary text at the same level as a TreeNode() you can use Bullet().
@@ -958,7 +967,7 @@ IMGUI_FUNCTION(TreeNode_3)
 LABEL_ARG(str_id)
 LABEL_ARG(fmt)
 CALL_FUNCTION(TreeNode, bool, str_id, fmt)
-IF_RET_ADD_END_STACK(3)
+IF_RET_ADD_END_STACK(4)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API bool          TreeNode(const void* ptr_id, const char* fmt, ...);    // "
@@ -989,14 +998,14 @@ END_IMGUI_FUNC
 IMGUI_FUNCTION(TreePush)
 OPTIONAL_LABEL_ARG(str_id)
 CALL_FUNCTION_NO_RET(TreePush, str_id)
-ADD_END_STACK(3)
+ADD_END_STACK(4)
 END_IMGUI_FUNC
 //    IMGUI_API void          TreePush(const void* ptr_id = NULL);                                    // "
 // Unsupported arg type const void* ptr_id = NULL
 //    IMGUI_API void          TreePop();                                                              // ~ Unindent()+PopId()
 IMGUI_FUNCTION(TreePop)
 CALL_FUNCTION_NO_RET(TreePop)
-POP_END_STACK(3)
+POP_END_STACK(4)
 END_IMGUI_FUNC
 //    IMGUI_API void          TreeAdvanceToLabelPos();                                                // advance cursor x position by GetTreeNodeToLabelSpacing()
 IMGUI_FUNCTION(TreeAdvanceToLabelPos)
@@ -1109,47 +1118,47 @@ END_IMGUI_FUNC
 //    IMGUI_API void          BeginTooltip();                                                     // use to create full-featured tooltip windows that aren't just text
 IMGUI_FUNCTION(BeginTooltip)
 CALL_FUNCTION_NO_RET(BeginTooltip)
-ADD_END_STACK(4)
+ADD_END_STACK(5)
 END_IMGUI_FUNC
 //    IMGUI_API void          EndTooltip();
 IMGUI_FUNCTION(EndTooltip)
 CALL_FUNCTION_NO_RET(EndTooltip)
-POP_END_STACK(4)
+POP_END_STACK(5)
 END_IMGUI_FUNC
 //    IMGUI_API bool          BeginMainMenuBar();                                                 // create and append to a full screen menu-bar. only call EndMainMenuBar() if this returns true!
 IMGUI_FUNCTION(BeginMainMenuBar)
 CALL_FUNCTION(BeginMainMenuBar, bool)
-IF_RET_ADD_END_STACK(5)
+IF_RET_ADD_END_STACK(6)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API void          EndMainMenuBar();
 IMGUI_FUNCTION(EndMainMenuBar)
 CALL_FUNCTION_NO_RET(EndMainMenuBar)
-POP_END_STACK(5)
+POP_END_STACK(6)
 END_IMGUI_FUNC
 //    IMGUI_API bool          BeginMenuBar();                                                     // append to menu-bar of current window (requires ImGuiWindowFlags_MenuBar flag set). only call EndMenuBar() if this returns true!
 IMGUI_FUNCTION(BeginMenuBar)
 CALL_FUNCTION(BeginMenuBar, bool)
-IF_RET_ADD_END_STACK(6)
+IF_RET_ADD_END_STACK(7)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API void          EndMenuBar();
 IMGUI_FUNCTION(EndMenuBar)
 CALL_FUNCTION_NO_RET(EndMenuBar)
-POP_END_STACK(6)
+POP_END_STACK(7)
 END_IMGUI_FUNC
 //    IMGUI_API bool          BeginMenu(const char* label, bool enabled = true);                  // create a sub-menu entry. only call EndMenu() if this returns true!
 IMGUI_FUNCTION(BeginMenu)
 LABEL_ARG(label)
 OPTIONAL_BOOL_ARG(enabled, true)
 CALL_FUNCTION(BeginMenu, bool, label, enabled)
-IF_RET_ADD_END_STACK(7)
+IF_RET_ADD_END_STACK(8)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API void          EndMenu();
 IMGUI_FUNCTION(EndMenu)
 CALL_FUNCTION_NO_RET(EndMenu)
-POP_END_STACK(7)
+POP_END_STACK(8)
 END_IMGUI_FUNC
 //    IMGUI_API bool          MenuItem(const char* label, const char* shortcut = NULL, bool selected = false, bool enabled = true);  // return true when activated. shortcuts are displayed for convenience but not processed by ImGui at the moment
 IMGUI_FUNCTION(MenuItem)
@@ -1179,7 +1188,7 @@ END_IMGUI_FUNC
 IMGUI_FUNCTION(BeginPopup)
 LABEL_ARG(str_id)
 CALL_FUNCTION(BeginPopup, bool, str_id)
-IF_RET_ADD_END_STACK(8)
+IF_RET_ADD_END_STACK(9)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API bool          BeginPopupModal(const char* name, bool* p_open = NULL, ImGuiWindowFlags extra_flags = 0);               // modal dialog (block interactions behind the modal window, can't close the modal window by clicking outside)
@@ -1188,7 +1197,7 @@ LABEL_ARG(name)
 OPTIONAL_BOOL_POINTER_ARG(p_open)
 OPTIONAL_INT_ARG(extra_flags, 0)
 CALL_FUNCTION(BeginPopupModal, bool, name, p_open, extra_flags)
-IF_RET_ADD_END_STACK(8)
+IF_RET_ADD_END_STACK(9)
 PUSH_BOOL(ret)
 END_BOOL_POINTER(p_open)
 END_IMGUI_FUNC
@@ -1197,7 +1206,7 @@ IMGUI_FUNCTION(BeginPopupContextItem)
 LABEL_ARG(str_id)
 OPTIONAL_INT_ARG(mouse_button, 1)
 CALL_FUNCTION(BeginPopupContextItem, bool, str_id, mouse_button)
-IF_RET_ADD_END_STACK(8)
+IF_RET_ADD_END_STACK(9)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API bool          BeginPopupContextWindow(bool also_over_items = true, const char* str_id = NULL, int mouse_button = 1);  // helper to open and begin popup when clicked on current window.
@@ -1206,7 +1215,7 @@ OPTIONAL_BOOL_ARG(also_over_items, true)
 OPTIONAL_LABEL_ARG(str_id)
 OPTIONAL_INT_ARG(mouse_button, 1)
 CALL_FUNCTION(BeginPopupContextWindow, bool, also_over_items, str_id, mouse_button)
-IF_RET_ADD_END_STACK(8)
+IF_RET_ADD_END_STACK(9)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API bool          BeginPopupContextVoid(const char* str_id = NULL, int mouse_button = 1);                                 // helper to open and begin popup when clicked in void (no window).
@@ -1214,13 +1223,13 @@ IMGUI_FUNCTION(BeginPopupContextVoid)
 OPTIONAL_LABEL_ARG(str_id)
 OPTIONAL_INT_ARG(mouse_button, 1)
 CALL_FUNCTION(BeginPopupContextVoid, bool, str_id, mouse_button)
-IF_RET_ADD_END_STACK(8)
+IF_RET_ADD_END_STACK(9)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API void          EndPopup();
 IMGUI_FUNCTION(EndPopup)
 CALL_FUNCTION_NO_RET(EndPopup)
-POP_END_STACK(8)
+POP_END_STACK(9)
 END_IMGUI_FUNC
 //    IMGUI_API void          CloseCurrentPopup();                                                // close the popup we have begin-ed into. clicking on a MenuItem or Selectable automatically close the current popup.
 IMGUI_FUNCTION(CloseCurrentPopup)
@@ -1413,13 +1422,13 @@ UINT_ARG(id)
 IM_VEC_2_ARG(size)
 OPTIONAL_INT_ARG(extra_flags, 0)
 CALL_FUNCTION(BeginChildFrame, bool, id, size, extra_flags)
-IF_RET_ADD_END_STACK(9)
+IF_RET_ADD_END_STACK(10)
 PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API void          EndChildFrame();
 IMGUI_FUNCTION(EndChildFrame)
 CALL_FUNCTION_NO_RET(EndChildFrame)
-POP_END_STACK(9)
+POP_END_STACK(10)
 END_IMGUI_FUNC
 //    IMGUI_API ImVec4        ColorConvertU32ToFloat4(ImU32 in);
 // Unsupported return type ImVec4
@@ -1577,14 +1586,15 @@ END_IMGUI_FUNC
 END_STACK_START
 END_STACK_OPTION(0, End)
 END_STACK_OPTION(1, EndChild)
-END_STACK_OPTION(2, EndGroup)
-END_STACK_OPTION(3, TreePop)
-END_STACK_OPTION(4, EndTooltip)
-END_STACK_OPTION(5, EndMainMenuBar)
-END_STACK_OPTION(6, EndMenuBar)
-END_STACK_OPTION(7, EndMenu)
-END_STACK_OPTION(8, EndPopup)
-END_STACK_OPTION(9, EndChildFrame)
+END_STACK_OPTION(2, PopStyleVar)
+END_STACK_OPTION(3, EndGroup)
+END_STACK_OPTION(4, TreePop)
+END_STACK_OPTION(5, EndTooltip)
+END_STACK_OPTION(6, EndMainMenuBar)
+END_STACK_OPTION(7, EndMenuBar)
+END_STACK_OPTION(8, EndMenu)
+END_STACK_OPTION(9, EndPopup)
+END_STACK_OPTION(10, EndChildFrame)
 END_STACK_END
 //enum ImGuiWindowFlags_
 
