@@ -8,7 +8,9 @@ This repo only deals with binding ImGui with lua and doesn't deal with setting u
 
 For LOVE bindings check out https://github.com/slages/love-imgui (uses these C++ bindings and does the rest of the work for you).
 
-Supported functions: 222 Unsupported functions: 77 for 1.50 (WIP)
+Function support for dear imgui 1.50 (WIP):
+Normal Imgui functions: Supported: 222 Unsupported: 77
+Imgui DrawList functions: Supported: 34 Unsupported: 10
 
 ##How to call these imgui bindings from lua##
 

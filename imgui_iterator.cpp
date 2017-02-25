@@ -1662,7 +1662,10 @@ IMGUI_FUNCTION_DRAW_LIST(PopClipRect)
 DRAW_LIST_CALL_FUNCTION_NO_RET(PopClipRect)
 END_IMGUI_FUNC
 //    IMGUI_API void  PushTextureID(const ImTextureID& texture_id);
-// Unsupported arg type const ImTextureID& texture_id
+IMGUI_FUNCTION_DRAW_LIST(PushTextureID)
+IM_TEXTURE_ID_ARG(texture_id)
+DRAW_LIST_CALL_FUNCTION_NO_RET(PushTextureID, texture_id)
+END_IMGUI_FUNC
 //    IMGUI_API void  PopTextureID();
 IMGUI_FUNCTION_DRAW_LIST(PopTextureID)
 DRAW_LIST_CALL_FUNCTION_NO_RET(PopTextureID)

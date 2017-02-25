@@ -196,9 +196,11 @@ sub generateNamespaceImgui {
             push(@before, "UINT_ARG($name)");
           }
           push(@funcArgs, $name);
-        #ImTextureID 
-        } elsif ($args[$i] =~ m/^ *ImTextureID ([^ =\[]*) *$/) {
-          my $name = $1;
+        #ImTextureID or const ImTextureID&
+        # const ImTextureID& is the same thing as var
+        # as lua is concerned
+        } elsif ($args[$i] =~ m/^ *(ImTextureID|const ImTextureID&) ([^ =\[]*) *$/) {
+          my $name = $2;
           push(@before, "IM_TEXTURE_ID_ARG($name)");
           push(@funcArgs, $name);
           # bool with default value or not
@@ -491,9 +493,11 @@ sub generateDrawListFunctions {
             push(@before, "UINT_ARG($name)");
           }
           push(@funcArgs, $name);
-        #ImTextureID 
-        } elsif ($args[$i] =~ m/^ *ImTextureID ([^ =\[]*) *$/) {
-          my $name = $1;
+        #ImTextureID or const ImTextureID&
+        # const ImTextureID& is the same thing as var
+        # as lua is concerned
+        } elsif ($args[$i] =~ m/^ *(ImTextureID|const ImTextureID&) ([^ =\[]*) *$/) {
+          my $name = $2;
           push(@before, "IM_TEXTURE_ID_ARG($name)");
           push(@funcArgs, $name);
           # bool with default value or not
