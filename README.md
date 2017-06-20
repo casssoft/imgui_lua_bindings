@@ -1,4 +1,4 @@
-#These are imgui bindings for lua.#
+# These are imgui bindings for lua.
 
 ImGui https://github.com/ocornut/imgui
 
@@ -12,7 +12,7 @@ Function support for dear imgui 1.50 (WIP):
 Normal Imgui functions: Supported: 222 Unsupported: 77
 Imgui DrawList functions: Supported: 34 Unsupported: 10
 
-##How to call these imgui bindings from lua##
+## How to call these imgui bindings from lua
 
 It mostly is the same as calling from C++ except for dealing with pointers and ImVecs
 
@@ -26,7 +26,7 @@ How to call function in lua
 ret = imgui.RadioButton("String goes here", isActive)
 ```
 
-##Pointers:##
+## Pointers:
 
 Lua doesn't have pointers but it has multiple return values
 so instead of giving it a pointer, you give it a value and it will pass
@@ -57,7 +57,7 @@ Begin normally returns whether it's desirable to draw or not as well as setting 
 of p_opened to whether the window is open or not. Still use the first return value to decide to whether to call the ImGui functions for that window and imgui.End().
 
 
-##ImVecs:##
+## ImVecs:
 
 Those are arguments are expanded to separate variables instead of one object.
 
@@ -71,7 +71,7 @@ How to call function in lua
 imgui.SetNextWindowPos(100, 50)
 ```
 
-##DrawList functions:##
+## DrawList functions:
 
 All functions that operate on drawlists are called with the prefix DrawList
 
@@ -89,7 +89,7 @@ Note you must specifiy the color in hex for now
 0x(ALPHA)(BLUE)(GREEN)(RED)
 0xFF0000FF = full opacity red
 
-##How to build:##
+## How to build:
 
 Generate iterator file (or use the one for 1.50 WIP already in the repo)
 ```
@@ -104,7 +104,7 @@ The imgui_lua_bindings.cpp has two functions RunString and LoadImguiBindings
 
 To use the functions there first assign the global lState to a valid lua_State, then call LoadImguiBindings then run as many strings as you want.
 
-##What is ENABLE_IM_LUA_END_STACK?##
+## What is ENABLE_IM_LUA_END_STACK?
 
 I made something to keep track of the imgui begin stack so that I could continue using
 imGui functions if an error ocurred in the lua script. If you don't care about that
@@ -112,7 +112,7 @@ don't define ENABLE_IM_LUA_END_STACK. I'm using a std::deque of ints to store wh
 begin calls were and then if the script errors I unwrap them with ends so that imgui won't
 complain when I render.
 
-##License?##
+## License?
 I don't feel like writing a license so here's it in laymans terms...
 
 You can use this code for whatever just don't redistribute the exact same source code and try to sell it, or claim that the source code was made by you.
@@ -121,5 +121,5 @@ You can include this source code in whatever open source project (let me know pl
 
 Just be chill and if you make a billion dollars send me an email or something.
 
-##Contributing##
+## Contributing
 If you have any improvements create a pull request! If you want a function supported or disagree with how the bindings work make an issue!
