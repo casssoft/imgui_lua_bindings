@@ -93,12 +93,12 @@ Note you must specifiy the color in hex for now
 
 Generate iterator file (or use the one for 1.50 WIP already in the repo)
 ```
-./generate_imgui_bindings.pl <../imgui/imgui.h >imgui_iterator.cpp
+./generate_imgui_bindings.pl <../imgui/imgui.h >imgui_iterator.inl
 ```
 
 This creates a file with info about imgui functions from the imgui.h file.
 
-Then copy the macro definitions in imgui_lua_bindings.cpp and include imgui_iterator.cpp in that the cpp file. This will generate static int impl_FunctionName(lua_State*L) {} functions for each imgui function. Bind these to lua functions and you're good to go. (Check out imgui_lua_bindings.cpp for a full example)
+Then copy the macro definitions in imgui_lua_bindings.cpp and include imgui_iterator.inl in that the cpp file. This will generate static int impl_FunctionName(lua_State*L) {} functions for each imgui function. Bind these to lua functions and you're good to go. (Check out imgui_lua_bindings.cpp for a full example)
 
 The imgui_lua_bindings.cpp has two functions RunString and LoadImguiBindings
 

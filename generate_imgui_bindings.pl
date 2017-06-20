@@ -4,7 +4,7 @@ use warnings;
 use diagnostics;
 # This works for IMGUI 1.50 WIP and does not get all functions
 #
-# to use ./generate_imgui_bindings.pl <imgui.h >imgui_iterator.cpp
+# to use ./generate_imgui_bindings.pl <imgui.h >imgui_iterator.inl
 # and define macros properly as in example imgui_lua_bindings.cpp
 #
 # check imgui_iterator for explanations of why some functions are not supported yet

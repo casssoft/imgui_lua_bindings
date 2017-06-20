@@ -283,7 +283,7 @@ static void ImEndStack(int type) { \
 #define POP_END_STACK(type)
 #endif
 
-#include "imgui_iterator.cpp"
+#include "imgui_iterator.inl"
 
 
 static const struct luaL_Reg imguilib [] = {
@@ -368,7 +368,7 @@ static const struct luaL_Reg imguilib [] = {
 #undef POP_END_STACK
 #define POP_END_STACK(type)
 
-#include "imgui_iterator.cpp"
+#include "imgui_iterator.inl"
   {"Button", impl_Button},
   {NULL, NULL}
 };
