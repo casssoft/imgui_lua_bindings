@@ -66,11 +66,11 @@ sub generateNamespaceImgui {
 
     #delete this so it's eaiser for regexes
     $line =~ s/ IM_PRINTFARGS\(.\);/;/g;
-    if ($line =~ m/ *IMGUI_API *([^ ]+) *([^\(]+)\(([^\;]*)\);/) {
+    if ($line =~ m/ *(IMGUI_API) *([^ ]+) *([^\(]+)\(([^\;]*)\);/) {
       print "//" . $line . "\n";
       # this will be set to 0 if something is not supported yet
       my $shouldPrint = 1;
-      my @args = split(',', $3);
+      my @args = split(',', $4);
       # things to do before calling real c++ function
       my @before;
       # arguments to real c++ function
@@ -78,13 +78,13 @@ sub generateNamespaceImgui {
       # things to do after callign real c++ function
       my @after;
       # real c++ function name
-      my $funcName = $2;
+      my $funcName = $3;
       if (defined($bannedNames{$funcName})) {
         print "//Not allowed to use this function\n";
         $shouldPrint = 0;
       }
       # c++ type of return value
-      my $retType = $1;
+      my $retType = $2;
       # macro used for calling function
       my $callMacro;
       # if it has a return value (yes I know this is not the cleanest code)
