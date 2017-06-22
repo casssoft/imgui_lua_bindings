@@ -13,8 +13,12 @@ use diagnostics;
 require "./parse_blocks.pl";
 
 sub generateNamespaceImgui {
-  my ($imguiBlock) = @_;
+  my ($imguiCodeBlock) = @_;
 
+  my $doEndStackOptions = 1;
+  my $terminator = "} \/\/ namespace ImGui";
+  my $callPrefix = "";
+  my $functionSuffix = "";
 
 #define bannedNames with keys of functions to exclude them
 # EXAMPLE:
@@ -55,7 +59,7 @@ sub generateNamespaceImgui {
   my %funcNames;
   my %endTypeToInt;
   my @endTypes;
-  foreach $line (split /\n/, $imguiBlock) {
+  foreach $line (split /\n/, $imguiCodeBlock) {
     #replace ImVec2(x, y) with ImVec2 x, y so it's easier for regex (and ImVec4)
     $line =~ s/ImVec2\(([^,]*),([^\)]*)\)/ImVec2 $1 $2/g;
     $line =~ s/ImVec4\(([^,]*),([^\)]*),([^\)]*),([^\)]*)\)/ImVec4 $1 $2 $3 $4/g;
@@ -86,23 +90,23 @@ sub generateNamespaceImgui {
       # if it has a return value (yes I know this is not the cleanest code)
       my $hasRet = 1;
       if ($retType =~ /^void$/) {
-        $callMacro = "CALL_FUNCTION_NO_RET";
+        $callMacro = "${callPrefix}CALL_FUNCTION_NO_RET";
         $hasRet = 0;
       } elsif ($retType =~ /^bool$/) {
-        $callMacro = "CALL_FUNCTION";
+        $callMacro = "${callPrefix}CALL_FUNCTION";
         push(@funcArgs, "bool");
         push(@after, "PUSH_BOOL(ret)");
       } elsif ($retType =~ /^float$/) {
-        $callMacro = "CALL_FUNCTION";
+        $callMacro = "${callPrefix}CALL_FUNCTION";
         push(@funcArgs, "float");
         push(@after, "PUSH_NUMBER(ret)");
       } elsif ($retType =~ /^ImVec2$/) {
-        $callMacro = "CALL_FUNCTION";
+        $callMacro = "${callPrefix}CALL_FUNCTION";
         push(@funcArgs, "ImVec2");
         push(@after, "PUSH_NUMBER(ret.x)");
         push(@after, "PUSH_NUMBER(ret.y)");
       } elsif ($retType =~ /^(unsigned int|ImGuiID|ImU32)$/) {
-        $callMacro = "CALL_FUNCTION";
+        $callMacro = "${callPrefix}CALL_FUNCTION";
         push(@funcArgs, "unsigned int");
         push(@after, "PUSH_NUMBER(ret)");
       } else {
@@ -240,7 +244,7 @@ sub generateNamespaceImgui {
         }
         $funcNames{$luaFunc} = 1;
 
-        print "IMGUI_FUNCTION($luaFunc)\n";
+        print "IMGUI_FUNCTION${functionSuffix}($luaFunc)\n";
         for (my $i = 0; $i < @before; $i++) {
           print $before[$i] . "\n";
         }
@@ -298,22 +302,27 @@ sub generateNamespaceImgui {
       } else {
         $numUnsupported += 1;
       }
-    } elsif ($line =~ m/^} \/\/ namespace ImGui$/) {
-      last;
+    } elsif ($terminator) {
+        if ($line =~ m/^${terminator}$/) {
+            last;
+        }
     }
   }
 #for end stack stuff
-  print "END_STACK_START\n";
-  for (my $i = 0; $i < @endTypes; $i++) {
-    my $endFunc;
-    if (defined($changeN{$endTypes[$i]})) {
-      $endFunc = $changeN{$endTypes[$i]};
-    } else {
-      $endFunc = "End" . $endTypes[$i];
-    }
-    print "END_STACK_OPTION($i, " . $endFunc .")\n";
+  if ($doEndStackOptions)
+  {
+      print "END_STACK_START\n";
+      for (my $i = 0; $i < @endTypes; $i++) {
+          my $endFunc;
+          if (defined($changeN{$endTypes[$i]})) {
+              $endFunc = $changeN{$endTypes[$i]};
+          } else {
+              $endFunc = "End" . $endTypes[$i];
+          }
+          print "END_STACK_OPTION($i, " . $endFunc .")\n";
+      }
+      print "END_STACK_END\n";
   }
-  print "END_STACK_END\n";
 
 #debug info
   print STDERR "Supported: $numSupported Unsupported: $numUnsupported\n";
@@ -322,8 +331,12 @@ sub generateNamespaceImgui {
 
 # TODO Combine shared logic of draw list and main imgui
 sub generateDrawListFunctions {
-  my ($drawListBlock) = @_;
+  my ($imguiCodeBlock) = @_;
 
+  my $doEndStackOptions = 0;
+  my $terminator = 0;
+  my $callPrefix = "DRAW_LIST_";
+  my $functionSuffix = "_DRAW_LIST";
 
 #define bannedNames with keys of functions to exclude them
 # EXAMPLE:
@@ -352,7 +365,7 @@ sub generateDrawListFunctions {
   my %funcNames;
   my %endTypeToInt;
   my @endTypes;
-  foreach $line (split /\n/, $drawListBlock) {
+  foreach $line (split /\n/, $imguiCodeBlock) {
     #replace ImVec2(x, y) with ImVec2 x, y so it's easier for regex (and ImVec4)
     $line =~ s/ImVec2\(([^,]*),([^\)]*)\)/ImVec2 $1 $2/g;
     $line =~ s/ImVec4\(([^,]*),([^\)]*),([^\)]*),([^\)]*)\)/ImVec4 $1 $2 $3 $4/g;
@@ -383,23 +396,23 @@ sub generateDrawListFunctions {
       # if it has a return value (yes I know this is not the cleanest code)
       my $hasRet = 1;
       if ($retType =~ /^void$/) {
-        $callMacro = "DRAW_LIST_CALL_FUNCTION_NO_RET";
+        $callMacro = "${callPrefix}CALL_FUNCTION_NO_RET";
         $hasRet = 0;
       } elsif ($retType =~ /^bool$/) {
-        $callMacro = "DRAW_LIST_CALL_FUNCTION";
+        $callMacro = "${callPrefix}CALL_FUNCTION";
         push(@funcArgs, "bool");
         push(@after, "PUSH_BOOL(ret)");
       } elsif ($retType =~ /^float$/) {
-        $callMacro = "DRAW_LIST_CALL_FUNCTION";
+        $callMacro = "${callPrefix}CALL_FUNCTION";
         push(@funcArgs, "float");
         push(@after, "PUSH_NUMBER(ret)");
       } elsif ($retType =~ /^ImVec2$/) {
-        $callMacro = "DRAW_LIST_CALL_FUNCTION";
+        $callMacro = "${callPrefix}CALL_FUNCTION";
         push(@funcArgs, "ImVec2");
         push(@after, "PUSH_NUMBER(ret.x)");
         push(@after, "PUSH_NUMBER(ret.y)");
       } elsif ($retType =~ /^(unsigned int|ImGuiID|ImU32)$/) {
-        $callMacro = "DRAW_LIST_CALL_FUNCTION";
+        $callMacro = "${callPrefix}CALL_FUNCTION";
         push(@funcArgs, "unsigned int");
         push(@after, "PUSH_NUMBER(ret)");
       } else {
@@ -441,19 +454,19 @@ sub generateDrawListFunctions {
             push(@before, "LABEL_ARG($name)");
           }
           push(@funcArgs, $name);
-        # ImVec2 
-        } elsif ($args[$i] =~ m/^ *ImVec2 ([^ ]*) *$/) {
-          my $name = $1;
-          push(@before, "IM_VEC_2_ARG($name)");
-          push(@funcArgs, $name);
         #const ImVec2& with default or not
         } elsif ($args[$i] =~ m/^ *const ImVec2& ([^ ]*) *(= * ImVec2 [^ ]* [^ ]*|) *$/) {
-           my $name = $1;
+          my $name = $1;
           if ($2 =~ m/^= * ImVec2 ([^ ]*) ([^ ]*)$/) {
             push(@before, "OPTIONAL_IM_VEC_2_ARG($name, $1, $2)");
           } else {
             push(@before, "IM_VEC_2_ARG($name)");
           }
+          push(@funcArgs, $name);
+        # ImVec2 
+        } elsif ($args[$i] =~ m/^ *ImVec2 ([^ ]*) *$/) {
+          my $name = $1;
+          push(@before, "IM_VEC_2_ARG($name)");
           push(@funcArgs, $name);
         #const ImVec4& with default or not
         } elsif ($args[$i] =~ m/^ *const ImVec4& ([^ ]*) *(= * ImVec4 [^ ]* [^ ]* [^ ]* [^ ]*|) *$/) {
@@ -537,7 +550,7 @@ sub generateDrawListFunctions {
         }
         $funcNames{$luaFunc} = 1;
 
-        print "IMGUI_FUNCTION_DRAW_LIST($luaFunc)\n";
+        print "IMGUI_FUNCTION${functionSuffix}($luaFunc)\n";
         for (my $i = 0; $i < @before; $i++) {
           print $before[$i] . "\n";
         }
@@ -595,20 +608,27 @@ sub generateDrawListFunctions {
       } else {
         $numUnsupported += 1;
       }
+    } elsif ($terminator) {
+        if ($line =~ m/^${terminator}$/) {
+            last;
+        }
     }
   }
 #for end stack stuff
-  #print "END_STACK_START\n";
-  #for (my $i = 0; $i < @endTypes; $i++) {
-  #  my $endFunc;
-  #  if (defined($changeN{$endTypes[$i]})) {
-  #    $endFunc = $changeN{$endTypes[$i]};
-  #  } else {
-  #    $endFunc = "End" . $endTypes[$i];
-  #  }
-  #  print "END_STACK_OPTION($i, " . $endFunc .")\n";
-  #}
-  #print "END_STACK_END\n";
+  if ($doEndStackOptions)
+  {
+      print "END_STACK_START\n";
+      for (my $i = 0; $i < @endTypes; $i++) {
+          my $endFunc;
+          if (defined($changeN{$endTypes[$i]})) {
+              $endFunc = $changeN{$endTypes[$i]};
+          } else {
+              $endFunc = "End" . $endTypes[$i];
+          }
+          print "END_STACK_OPTION($i, " . $endFunc .")\n";
+      }
+      print "END_STACK_END\n";
+  }
 
 #debug info
   print STDERR "Supported: $numSupported Unsupported: $numUnsupported\n";
