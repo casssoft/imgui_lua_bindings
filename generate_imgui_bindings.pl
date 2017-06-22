@@ -80,33 +80,33 @@ sub generateNamespaceImgui {
         $shouldPrint = 0;
       }
       # c++ type of return value
-      my $retType;
+      my $retType = $1;
       # macro used for calling function
       my $callMacro;
       # if it has a return value (yes I know this is not the cleanest code)
       my $hasRet = 1;
-      if ($1 =~ /^void$/) {
+      if ($retType =~ /^void$/) {
         $callMacro = "CALL_FUNCTION_NO_RET";
         $hasRet = 0;
-      } elsif ($1 =~ /^bool$/) {
+      } elsif ($retType =~ /^bool$/) {
         $callMacro = "CALL_FUNCTION";
         push(@funcArgs, "bool");
         push(@after, "PUSH_BOOL(ret)");
-      } elsif ($1 =~ /^float$/) {
+      } elsif ($retType =~ /^float$/) {
         $callMacro = "CALL_FUNCTION";
         push(@funcArgs, "float");
         push(@after, "PUSH_NUMBER(ret)");
-      } elsif ($1 =~ /^ImVec2$/) {
+      } elsif ($retType =~ /^ImVec2$/) {
         $callMacro = "CALL_FUNCTION";
         push(@funcArgs, "ImVec2");
         push(@after, "PUSH_NUMBER(ret.x)");
         push(@after, "PUSH_NUMBER(ret.y)");
-      } elsif ($1 =~ /^(unsigned int|ImGuiID|ImU32)$/) {
+      } elsif ($retType =~ /^(unsigned int|ImGuiID|ImU32)$/) {
         $callMacro = "CALL_FUNCTION";
         push(@funcArgs, "unsigned int");
         push(@after, "PUSH_NUMBER(ret)");
       } else {
-        print "// Unsupported return type $1\n";
+        print "// Unsupported return type $retType\n";
         $shouldPrint = 0;
       }
       for (my $i = 0; $i < @args; $i++) {
@@ -377,33 +377,33 @@ sub generateDrawListFunctions {
         $shouldPrint = 0;
       }
       # c++ type of return value
-      my $retType;
+      my $retType = $2;
       # macro used for calling function
       my $callMacro;
       # if it has a return value (yes I know this is not the cleanest code)
       my $hasRet = 1;
-      if ($2 =~ /^void$/) {
+      if ($retType =~ /^void$/) {
         $callMacro = "DRAW_LIST_CALL_FUNCTION_NO_RET";
         $hasRet = 0;
-      } elsif ($2 =~ /^bool$/) {
+      } elsif ($retType =~ /^bool$/) {
         $callMacro = "DRAW_LIST_CALL_FUNCTION";
         push(@funcArgs, "bool");
         push(@after, "PUSH_BOOL(ret)");
-      } elsif ($2 =~ /^float$/) {
+      } elsif ($retType =~ /^float$/) {
         $callMacro = "DRAW_LIST_CALL_FUNCTION";
         push(@funcArgs, "float");
         push(@after, "PUSH_NUMBER(ret)");
-      } elsif ($2 =~ /^ImVec2$/) {
+      } elsif ($retType =~ /^ImVec2$/) {
         $callMacro = "DRAW_LIST_CALL_FUNCTION";
         push(@funcArgs, "ImVec2");
         push(@after, "PUSH_NUMBER(ret.x)");
         push(@after, "PUSH_NUMBER(ret.y)");
-      } elsif ($2 =~ /^(unsigned int|ImGuiID|ImU32)$/) {
+      } elsif ($retType =~ /^(unsigned int|ImGuiID|ImU32)$/) {
         $callMacro = "DRAW_LIST_CALL_FUNCTION";
         push(@funcArgs, "unsigned int");
         push(@after, "PUSH_NUMBER(ret)");
       } else {
-        print "// Unsupported return type $1\n";
+        print "// Unsupported return type $retType\n";
         $shouldPrint = 0;
       }
       for (my $i = 0; $i < @args; $i++) {
