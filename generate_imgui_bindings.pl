@@ -15,7 +15,7 @@ require "./parse_blocks.pl";
 sub generateNamespaceImgui {
   my ($imguiCodeBlock) = @_;
 
-  my $lineCaptureRegex = qr" *(IMGUI_API) *([^ ]+) *([^\(]+)\(([^\;]*)\);";
+  my $lineCaptureRegex = qr" *(IMGUI_API) *((const char\*)|([^ ]+)) *([^\(]+)\(([^\;]*)\);";
   my $doEndStackOptions = 1;
   my $terminator = "} \/\/ namespace ImGui";
   my $callPrefix = "";
@@ -70,7 +70,7 @@ sub generateNamespaceImgui {
 sub generateDrawListFunctions {
   my ($imguiCodeBlock) = @_;
 
-  my $lineCaptureRegex = qr" *(IMGUI_API|inline) *([^ ]+) *([^\(]+)\(([^\;]*)\);";
+  my $lineCaptureRegex = qr" *(IMGUI_API|inline) *((const char\*)|([^ ]+)) *([^\(]+)\(([^\;]*)\);";
   my $doEndStackOptions = 0;
   my $terminator = 0;
   my $callPrefix = "DRAW_LIST_";
@@ -158,7 +158,7 @@ sub generateImguiGeneric {
       print "//" . $line . "\n";
       # this will be set to 0 if something is not supported yet
       my $shouldPrint = 1;
-      my @args = split(',', $4);
+      my @args = split(',', $6);
       # things to do before calling real c++ function
       my @before;
       # arguments to real c++ function
@@ -166,7 +166,7 @@ sub generateImguiGeneric {
       # things to do after callign real c++ function
       my @after;
       # real c++ function name
-      my $funcName = $3;
+      my $funcName = $5;
       if (defined($bannedNames{$funcName})) {
         print "//Not allowed to use this function\n";
         $shouldPrint = 0;
@@ -180,6 +180,10 @@ sub generateImguiGeneric {
       if ($retType =~ /^void$/) {
         $callMacro = "${callPrefix}CALL_FUNCTION_NO_RET";
         $hasRet = 0;
+      } elsif ($retType =~ /^const char\*$/) {
+        $callMacro = "${callPrefix}CALL_FUNCTION";
+        push(@funcArgs, "const char*");
+        push(@after, "PUSH_STRING(ret)");
       } elsif ($retType =~ /^bool$/) {
         $callMacro = "${callPrefix}CALL_FUNCTION";
         push(@funcArgs, "bool");

@@ -10,7 +10,7 @@ For LOVE bindings check out https://github.com/slages/love-imgui (uses these C++
 
 Function support for dear imgui 1.50:
 
-    Normal Imgui functions:   Supported: 219 Unsupported: 80
+    Normal Imgui functions:   Supported: 222 Unsupported: 77
     Imgui DrawList functions: Supported: 35 Unsupported: 10
 
 ##How to call these imgui bindings from lua##
