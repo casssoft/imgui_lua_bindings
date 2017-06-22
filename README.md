@@ -90,6 +90,23 @@ Note you must specifiy the color in hex for now
 0x(ALPHA)(BLUE)(GREEN)(RED)
 0xFF0000FF = full opacity red
 
+
+##Enums:
+
+Enums are exposed through a "constant" table. They're namespaced with "ImGui" stripped from the name.
+
+```c++
+ImGui::SetNextWindowSize(ImVec2(550,680), ImGuiSetCond_FirstUseEver);
+ImGui::Begin("Demo", p_open, ImGuiWindowFlags_ShowBorders);
+ImGui::End()
+```
+
+```lua
+imgui.SetNextWindowSize(550,680, imgui.constant.SetCond.FirstUseEver)
+imgui.Begin("Demo", true, imgui.constant.WindowFlags.ShowBorders)
+imgui.End()
+```
+
 ##How to build:##
 
 Generate iterator file (or use the one for 1.50 already in the repo)

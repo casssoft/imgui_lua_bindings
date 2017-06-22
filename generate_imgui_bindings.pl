@@ -421,6 +421,25 @@ sub generateImguiGeneric {
 
 }
 
+sub generateEnums {
+  my $enumName = shift;
+  my ($imguiCodeBlock) = @_;
+
+  my $lineCaptureRegex = qr"^ *(ImGui)([^, ]+)_([a-zA-Z0-9]+)\b";
+
+  print "START_ENUM($enumName)\n";
+  my $line;
+  foreach $line (split /\n/, $imguiCodeBlock) {
+    if ($line =~ m/$lineCaptureRegex/) {
+      die "Malformed enum at $enumName" unless ($2 eq $enumName);
+
+      print "//" . $line . "\n";
+      print "MAKE_ENUM($1$2_$3,$3)\n";
+    }
+  }
+  print "END_ENUM($enumName)\n";
+}
+
 
 my ($blocksref, $blocknamesref) = parse_blocks();
 
@@ -431,6 +450,9 @@ for (my $i=0; $i < scalar @blocks; $i++) {
   print "//" . $blocknames[$i] . "\n";
   if ($blocknames[$i] eq "namespace ImGui\n") {
     generateNamespaceImgui($blocks[$i]);
+  }
+  if ($blocknames[$i] =~ m/enum ImGui(.*)_\n/) {
+    generateEnums($1, $blocks[$i]);
   }
   if ($blocknames[$i] eq "struct ImDrawList\n") {
     generateDrawListFunctions($blocks[$i]);
