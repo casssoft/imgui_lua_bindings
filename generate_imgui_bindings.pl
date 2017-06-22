@@ -15,6 +15,7 @@ require "./parse_blocks.pl";
 sub generateNamespaceImgui {
   my ($imguiCodeBlock) = @_;
 
+  my $lineCaptureRegex = qr" *(IMGUI_API) *([^ ]+) *([^\(]+)\(([^\;]*)\);";
   my $doEndStackOptions = 1;
   my $terminator = "} \/\/ namespace ImGui";
   my $callPrefix = "";
@@ -66,7 +67,7 @@ sub generateNamespaceImgui {
 
     #delete this so it's eaiser for regexes
     $line =~ s/ IM_PRINTFARGS\(.\);/;/g;
-    if ($line =~ m/ *(IMGUI_API) *([^ ]+) *([^\(]+)\(([^\;]*)\);/) {
+    if ($line =~ m/$lineCaptureRegex/) {
       print "//" . $line . "\n";
       # this will be set to 0 if something is not supported yet
       my $shouldPrint = 1;
@@ -333,6 +334,7 @@ sub generateNamespaceImgui {
 sub generateDrawListFunctions {
   my ($imguiCodeBlock) = @_;
 
+  my $lineCaptureRegex = qr" *(IMGUI_API|inline) *([^ ]+) *([^\(]+)\(([^\;]*)\);";
   my $doEndStackOptions = 0;
   my $terminator = 0;
   my $callPrefix = "DRAW_LIST_";
@@ -372,7 +374,7 @@ sub generateDrawListFunctions {
 
     #delete this so it's eaiser for regexes
     $line =~ s/ IM_PRINTFARGS\(.\);/;/g;
-    if ($line =~ m/ *(IMGUI_API|inline) *([^ ]+) *([^\(]+)\(([^\;]*)\);/) {
+    if ($line =~ m/$lineCaptureRegex/) {
       print "//" . $line . "\n";
       # this will be set to 0 if something is not supported yet
       my $shouldPrint = 1;
