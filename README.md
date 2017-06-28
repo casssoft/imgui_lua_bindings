@@ -8,9 +8,10 @@ This repo only deals with binding ImGui with lua and doesn't deal with setting u
 
 For LOVE bindings check out https://github.com/slages/love-imgui (uses these C++ bindings and does the rest of the work for you).
 
-Function support for dear imgui 1.50 (WIP):
-Normal Imgui functions: Supported: 222 Unsupported: 77
-Imgui DrawList functions: Supported: 34 Unsupported: 10
+Function support for dear imgui 1.50:
+
+    Normal Imgui functions:   Supported: 222 Unsupported: 77
+    Imgui DrawList functions: Supported: 35 Unsupported: 10
 
 ##How to call these imgui bindings from lua##
 
@@ -89,16 +90,33 @@ Note you must specifiy the color in hex for now
 0x(ALPHA)(BLUE)(GREEN)(RED)
 0xFF0000FF = full opacity red
 
+
+##Enums:
+
+Enums are exposed through a "constant" table. They're namespaced with "ImGui" stripped from the name.
+
+```c++
+ImGui::SetNextWindowSize(ImVec2(550,680), ImGuiSetCond_FirstUseEver);
+ImGui::Begin("Demo", p_open, ImGuiWindowFlags_ShowBorders);
+ImGui::End()
+```
+
+```lua
+imgui.SetNextWindowSize(550,680, imgui.constant.SetCond.FirstUseEver)
+imgui.Begin("Demo", true, imgui.constant.WindowFlags.ShowBorders)
+imgui.End()
+```
+
 ##How to build:##
 
-Generate iterator file (or use the one for 1.50 WIP already in the repo)
+Generate iterator file (or use the one for 1.50 already in the repo)
 ```
-./generate_imgui_bindings.pl <../imgui/imgui.h >imgui_iterator.cpp
+./generate_imgui_bindings.pl <../imgui/imgui.h >imgui_iterator.inl
 ```
 
 This creates a file with info about imgui functions from the imgui.h file.
 
-Then copy the macro definitions in imgui_lua_bindings.cpp and include imgui_iterator.cpp in that the cpp file. This will generate static int impl_FunctionName(lua_State*L) {} functions for each imgui function. Bind these to lua functions and you're good to go. (Check out imgui_lua_bindings.cpp for a full example)
+Then copy the macro definitions in imgui_lua_bindings.cpp and include imgui_iterator.inl in that the cpp file. This will generate static int impl_FunctionName(lua_State*L) {} functions for each imgui function. Bind these to lua functions and you're good to go. (Check out imgui_lua_bindings.cpp for a full example)
 
 The imgui_lua_bindings.cpp has two functions RunString and LoadImguiBindings
 
