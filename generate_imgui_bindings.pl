@@ -2,14 +2,13 @@
 use strict;
 use warnings;
 use diagnostics;
-# This works for IMGUI 1.50 WIP and does not get all functions
+# This works for IMGUI 1.60 and does not get all functions
 #
-# to use ./generate_imgui_bindings.pl <imgui.h >imgui_iterator.inl
+# to use ./generate_imgui_bindings.pl <../imgui/imgui.h >imgui_iterator.inl
 # and define macros properly as in example imgui_lua_bindings.cpp
 #
 # check imgui_iterator for explanations of why some functions are not supported yet
 
-#TODO switch to export style with modules or just copy paste
 require "./parse_blocks.pl";
 
 sub generateNamespaceImgui {
@@ -425,7 +424,7 @@ sub generateEnums {
   my $enumName = shift;
   my ($imguiCodeBlock) = @_;
 
-  my $lineCaptureRegex = qr"^ *(ImGui)([^, ]+)_([a-zA-Z0-9]+)\b";
+  my $lineCaptureRegex = qr"^ *(ImGui)([^, _]+)_([a-zA-Z0-9]+)\b";
 
   print "START_ENUM($enumName)\n";
   my $line;

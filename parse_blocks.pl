@@ -20,6 +20,12 @@
 #  print "---------------BLOCK END -------------\n"
 #}
 
+
+
+# WARNING THIS FUNCTION WILL MESS UP ALL OF PARSING IF IT SEES
+# A DIFFERENT NUMBER OF BLOCKNAMES AS BLOCKS...
+# TODO FIX THIS ^
+
 #returns list of string blocks from stdin
 sub parse_blocks {
   my @blocks;
@@ -34,7 +40,7 @@ sub parse_blocks {
      $curBlock = "";
      next;
    }
-   if ($line =~ m/^};$|^} \/\//) {
+   if ($line =~ m/^};$|^} \/\/|^}$/) {
      push @blocks, $curBlock;
      $curBlock = "";
      next;
@@ -42,6 +48,9 @@ sub parse_blocks {
 
    $curBlock .= $line . "\n";
    $lastline = $line;
+  }
+  if (scalar @blocks != scalar @blocknames) {
+    print STDERR "WARNING PARSE BLOCKS IS RETURNING INVALID DATA\n"
   }
   return (\@blocks, \@blocknames);
 }
