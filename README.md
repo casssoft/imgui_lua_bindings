@@ -8,9 +8,11 @@ This repo only deals with binding ImGui with lua and doesn't deal with setting u
 
 For LOVE bindings check out https://github.com/slages/love-imgui (uses these C++ bindings and does the rest of the work for you).
 
-Function support for dear imgui 1.50 (WIP):
-Normal Imgui functions: Supported: 222 Unsupported: 77
-Imgui DrawList functions: Supported: 34 Unsupported: 10
+Function support for dear imgui 1.60:
+
+    Normal Imgui functions:   Supported: 204 Unsupported: 117
+    Imgui DrawList functions: Supported: 36 Unsupported: 12
+
 
 ## How to call these imgui bindings from lua
 
@@ -89,9 +91,26 @@ Note you must specifiy the color in hex for now
 0x(ALPHA)(BLUE)(GREEN)(RED)
 0xFF0000FF = full opacity red
 
-## How to build:
 
-Generate iterator file (or use the one for 1.50 WIP already in the repo)
+##Enums:
+
+Enums are exposed through a "constant" table. They're namespaced with "ImGui" stripped from the name.
+
+```c++
+ImGui::SetNextWindowSize(ImVec2(550,680), ImGuiSetCond_FirstUseEver);
+ImGui::Begin("Demo", p_open, ImGuiWindowFlags_ShowBorders);
+ImGui::End()
+```
+
+```lua
+imgui.SetNextWindowSize(550,680, imgui.constant.SetCond.FirstUseEver)
+imgui.Begin("Demo", true, imgui.constant.WindowFlags.ShowBorders)
+imgui.End()
+```
+
+##How to build:##
+
+Generate iterator file (or use the one for 1.50 already in the repo)
 ```
 ./generate_imgui_bindings.pl <../imgui/imgui.h >imgui_iterator.inl
 ```
