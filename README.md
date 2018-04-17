@@ -92,7 +92,7 @@ Note you must specifiy the color in hex for now
 0xFF0000FF = full opacity red
 
 
-##Enums:
+## Enums:
 
 Enums are exposed through a "constant" table. They're namespaced with "ImGui" stripped from the name.
 
@@ -108,7 +108,7 @@ imgui.Begin("Demo", true, imgui.constant.WindowFlags.ShowBorders)
 imgui.End()
 ```
 
-##How to build:##
+## How to build:
 
 Generate iterator file (or use the one for 1.50 already in the repo)
 ```
