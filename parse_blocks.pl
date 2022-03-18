@@ -63,21 +63,19 @@ sub parse_blocks {
 	  
 	if (does_line_match_end_block($line)) {
 	  push @blocks, $curBlock;
-
-	  # Enforce the invariant that we should have the same number of elements in blocks / block names
-	  if (scalar @blocks != scalar @blocknames) {
-	  	print STDERR "The parser did a bad and has mismatched block open / close.";
-	  	print STDERR "This is probably a problem with the regular expression that matches block open and close.";
-	  	die
-	  }
-	    
 	  $curBlock = "";
-	    
 	  next;
 	}
 	
 	$curBlock .= $line . "\n";
-	$lastline = $line;
+  $lastline = $line;
+  }
+
+  # Enforce the invariant that we should have the same number of elements in blocks / block names
+  if (scalar @blocks != scalar @blocknames) {
+    print STDERR "The parser did a bad and has mismatched block open / close.";
+    print STDERR "This is probably a problem with the regular expression that matches block open and close.";
+    die
   }
   return (\@blocks, \@blocknames);
 }
