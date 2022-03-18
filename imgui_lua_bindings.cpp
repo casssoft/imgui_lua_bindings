@@ -385,7 +385,8 @@ static const struct luaL_Reg imguilib [] = {
 #define END_ENUM(name)
 
 #include "imgui_iterator.inl"
-  {"Button", impl_Button},
+  // impl_Button is undeclared
+  // {"Button", impl_Button},
   {NULL, NULL}
 };
 
