@@ -15,7 +15,7 @@ require "./parse_blocks.pl";
 sub generateNamespaceImgui {
   my ($imguiCodeBlock) = @_;
 
-  my $lineCaptureRegex = qr" *(IMGUI_API) *((const char\*)|([^ ]+)) *([^\(]+)\(([^\;]*)\);";
+  my $lineCaptureRegex = qr" *(IMGUI_API)\s*((const char\*)|([^\s]+))\s*([^\(]+)\(([^\;]*)\);";
   my $doEndStackOptions = 1;
   my $terminator = "} \/\/ namespace ImGui";
   my $callPrefix = "";
@@ -70,7 +70,7 @@ sub generateNamespaceImgui {
 sub generateDrawListFunctions {
   my ($imguiCodeBlock) = @_;
 
-  my $lineCaptureRegex = qr" *(IMGUI_API|inline) *((const char\*)|([^ ]+)) *([^\(]+)\(([^\;]*)\);";
+  my $lineCaptureRegex = qr" *(IMGUI_API|inline)\s*((const char\*)|([^\s]+))\s*([^\(]+)\(([^\;]*)\);";
   my $doEndStackOptions = 0;
   my $terminator = 0;
   my $callPrefix = "DRAW_LIST_";
@@ -464,7 +464,7 @@ my $alreadyParsedMainImguiNamespace = 0;
 
 for (my $i=0; $i < scalar @blocks; $i++) {
   print "//" . $blocknames[$i] . "\n";
-  if (($blocknames[$i] eq "namespace ImGui\n") and not $alreadyParsedMainImguiNamespace) {
+  if (($blocknames[$i] =~ /^namespace ImGui\s*$/) and not $alreadyParsedMainImguiNamespace) {
 	$alreadyParsedMainImguiNamespace = 1;
     generateNamespaceImgui($blocks[$i]);
   }

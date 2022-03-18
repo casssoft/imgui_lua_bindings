@@ -32,12 +32,12 @@
 sub does_line_match_end_block {
   my $line = shift;
 
-  # Make sure you take into account random whitespace that could happen by using [ ]*[\t]*
+  # Make sure you take into account random whitespace that could happen by using \s*
   my $match = 0;
-  $match |= $line =~ m/^};[ ]*[\t]*\/\//;  # Semicolon,    comment
-  $match |= $line =~ m/^};[ ]*[\t]*$/;     # Semicolon,    no comment
-  $match |= $line =~ m/^}[ ]*[\t]*\/\//;   # No semicolon, comment
-  $match |= $line =~ m/^}[ ]*[\t]*$/;      # No semicolon, no comment
+  $match |= $line =~ m/^\s*};\s*\/\//;  # Semicolon,    comment
+  $match |= $line =~ m/^\s*};\s*$/;     # Semicolon,    no comment
+  $match |= $line =~ m/^\s*}\s*\/\//;   # No semicolon, comment
+  $match |= $line =~ m/^\s*}\s*$/;      # No semicolon, no comment
   return $match;
 }
 
@@ -45,7 +45,7 @@ sub does_line_match_begin_block {
   my $line = shift;
 
   my $match = 0;
-  $match |= $line =~ m/^{[ ]*[\t]*$/;
+  $match |= $line =~ m/^\s*{\s*$/;
   return $match
 }
 
