@@ -1,3 +1,5 @@
+#include "imgui_lua_bindings.hpp"
+
 #include <stdio.h>
 #include <imgui.h>
 #include <deque>
@@ -496,7 +498,6 @@ static void PushImguiEnums(lua_State* lState, const char* tableName) {
 
   lua_rawset(lState, -3);
 };
-
 
 void LoadImguiBindings() {
   if (!lState) {
