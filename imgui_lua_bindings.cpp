@@ -1,3 +1,5 @@
+#include "imgui_lua_bindings.hpp"
+
 #include <stdio.h>
 #include <imgui.h>
 #include <deque>
@@ -385,7 +387,8 @@ static const struct luaL_Reg imguilib [] = {
 #define END_ENUM(name)
 
 #include "imgui_iterator.inl"
-  {"Button", impl_Button},
+  // impl_Button is undeclared
+  // {"Button", impl_Button},
   {NULL, NULL}
 };
 
@@ -495,7 +498,6 @@ static void PushImguiEnums(lua_State* lState, const char* tableName) {
 
   lua_rawset(lState, -3);
 };
-
 
 void LoadImguiBindings() {
   if (!lState) {
